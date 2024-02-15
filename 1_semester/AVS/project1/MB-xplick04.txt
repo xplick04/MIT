@@ -1,0 +1,49 @@
+#### Stručně odpovězte na následující otázky: ######
+
+
+1. Byla "Line" vektorizace časově efektivní? Proč?
+==============================================================================
+Ano byla. Díky vektorizaci je možné zpracovávat v jeden čas více dat zároveň.
+Navíc bylo na základě symetrie možné počítat pouze polovinu výsledných dat. Díky 
+přehození smyček je možné počítat hodnotu pixelů pro celý řádek místo pro jeden 
+pixel zvlášť a poté je možné přeskočit již zpracované pixely. 
+
+
+2. Jaká byla dosažena výkonnost v Intel Advisoru pro jednotlivé implementace 
+(v GFLOPS)?
+==============================================================================
+Batch = 44.535
+Line = 13.638
+Ref = 0.544
+
+
+U Batch i Line bylo možné zvýšit hodnoty GFLOPS ovšem na úkor rychlosti výpočtu. Toho
+se dalo dosáhnout například nahrazením nejvnitřnějšího "if" za ternární operátor,
+nebo přesunem podmínky kontroly zpracovaného pixelu do vnitřní podmínky.
+
+3. Jaká část kódu byla vektorizována v "Line" implementaci? Vyčteme tuto 
+informaci i u batch kalkulátoru?
+==============================================================================
+Vektorizovány byly nejvnitřnější smyčky. Ano vyčteme, tuto informaci lze zjistit
+na základě "oranžových smyček" u jednotlivých částí kódu v Intel Advisor nebo 
+také procentuálně z přehledu.
+
+
+
+4. Co vyčteme z Roofline modelu pro obě vektorizované implementace?
+==============================================================================
+Ani jedna z navržených implementací není limitována L1 (červené tečky se narozdíl 
+od referenční implementace nachází pod vodorovnou střechou)zatímco referenční 
+implementace je limitována DRAM. V obouch implementacích překročen skalární peak. 
+Obě implenetované verze si vedly lépe než referenční implementace jak z hlediska 
+aritmetické intenzity tak z hlediska GFLOPS.
+
+
+Popisek eval.png
+==============================================================================
+Z grafu lze vidět, že nejlépe si na všech možných velikostech a počtech iterací
+nejlépe vedla batch implementace, která měla zhruba poloviční čas line implementace.
+Dále jde vidět, že s velikostí vstupu si batch implementace navyšuje svůj náskok
+oproti line implementaci.
+
+

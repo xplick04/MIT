@@ -1,0 +1,144 @@
+Architektury Výpočetních Systémů (AVS 2023)
+Projekt č. 2 (PMC)
+Login: xplick04
+
+Úloha 1: Paralelizace původního řešení
+===============================================================================
+
+1) Kterou ze smyček (viz zadání) je vhodnější paralelizovat a co způsobuje 
+   neefektivitu paralelizaci té druhé?
+
+Nejlepší bylo paralelizovat smyčku na nejvyšší úrovni (cyklus přes všechny kostky).
+Díky paralelizaci tohoto cyklu běžely paralelně i smyčky, které se přes buildCube() 
+volaly z tohoto cyklu. Zatímco kdyby se paralelizovala smyčka ve funkci evaluateFieldAt(),
+byla by paralelizována pouze část kódu v této smyčce. Navíc by v druhé smyčce nutné
+vložit do kritické sekce výpočet minimální hodnoty, což by způsobilo hodně čekání. 
+
+2) Jaké plánování (rozdělení práce mezi vlákna) jste zvolili a proč? 
+   Jaký vliv má velikost "chunk" při dynamickém plánování (8, 16, 32, 64)?
+
+Pro plánování bylo zvoleno dynamického plánování s hodnotou chunk 32. Důvodem volby
+dynamického plánování byla skutečnost, že délky jednotlivých tásků mají proměnlivou 
+dobu výpočtu (není jasné, jestli prostor v tasku obsahuje trojuhelníky a tudíž skončí 
+dřív). Pro otestování této volby byly změřeny časy jednotlivých druhů plánování. 
+Dynamic trval při zpracování (1570ms) oproti ostatním(guided-2100ms, static-2050ms, 
+auto-1650ms). 
+
+Při testování velikosti chunk bylo v průměru dosaženo následujících hodnot 
+(8-1580ms, 16-1580ms, 32-1570ms, 64-1590ms). Z těchto pozorování lze vidět, že 
+si nejlépe vedla velikost chunku 32 ovšem výslekdy časů byly občas méně či více
+nekonzistentní.
+
+
+3) Jakým způsobem zajišťujete ukládání trojúhelníků z několika vláken současně?
+
+Ukládání je zajištěno pomocí vektoru vektorů, kde každé vlákno má svůj vlastní
+vektor pro ukládání, díky tomu není nutné omezovat přístup pro souběžný zápis,
+jelikož vlákna nezapisují na stejné místo v paměti. Na závěr jsou tyto vektory 
+sjednoceny do jednoho (mimo paralelní sekci). Další možností je přídání zápisu
+ referenčního řešení do kritické sekce. Díky tomu je umožněn zápis pouzde jednomu 
+vláknu v jeden moment. Tento způsob ovšem zpomaluje celkovou dobu výpočtu (z důvodu
+ čekání). Součet trojúhelníků díky redukci není nutné dávat do kritické sekce.
+
+
+Úloha 2: Paralelní průchod stromem
+===============================================================================
+
+1) Stručně popište použití OpenMP tasků ve vašem řešení.
+
+Ve funkci marchCubes() je zavolána rekuzivní funkce pro výpočet trojúhelníků.
+Rekuzivní funkce se nachází v paralelní sekci a poprvé se spuští s doplňkem single, 
+díky čemu je funkce spouštěna jen jedním vláknem. Ve funkci se nejrpve zjistí zdali 
+prostor obsahuje iso povrch, pokud ne rekurze končí. Jelikož se během rekurze 
+postupně zmenšuje velikost prohledávané krychle, je na začátku funkce také podmínka, 
+která zajišťuje, že se při dostatečně malé velikosti hrany zavolá funkce buildCubes().
+Následně je v této rekurzivní funkci vytvořeno 8 tasků pro každou menší část o poloviční 
+délce hrany původní krychle. Při volání rekurze a sčítání výsledného počtu 
+trojúhelníků je nutné využít pragma omp atomic, aby vlákna nemohly zároveň zapisovat 
+do stejné proměnné. Proměnná i musí být firstprivate, jelikož každé vlákno potřebuje 
+svoji "instanci proměnné", aby si ji vlákna nepřepisovaly. Na závěr se před 
+vrácením počtu trojúhleníků čeká než budou všechny tasky dokončeny.
+
+
+2) Jaký vliv má na vaše řešení tzv. "cut-off"? Je vhodné vytvářet nový 
+   task pro každou krychli na nejnižší úrovni?
+
+Cut-off způsobuje, že se při zanoření do určité hloubky rekurze nevytvoří tasky, 
+tudíž se práce nezpracovává paralelně ale sekvenčně. V případě nastevení cut-off 
+na hodnotu 0 (tasky se nevytvoří již v první úrovni) vycházel čas výpočtu na 8880ms, 
+v druhé úrovni to bylo 2250ms, třetí 950ms, čtvrté 730ms, páté 680ms a šesté 680ms. 
+
+Z tohoto lze pozorovat, že vytváření tásků na nejnižší úrovni nemá žádný vliv na výsledný
+ čas, jelikož tam funkce zavolá buildCube() již na začátku při kontrole délky hrany 
+(krychle je nejmenší možná). 
+
+
+3) Jakým způsobem zajišťujete ukládání trojúhelníků z několika vláken současně?
+
+Ukládání je zajištěno stejným způsobem jako je tomu v implementace části loop.
+Součet trojúhelníků je realizován pomocí atomic update.
+
+Úloha 3: Grafy škálování všech řešení
+===============================================================================
+
+1) Stručně zhodnoťte efektivitu vytvořených řešení (na základě grafů ŠKÁLOVÁNÍ).
+
+Z grafu škálování vzhledem k velikosti gridu lze vidět, že stromový algoritmus je
+od určité velikosti gridu rychlejší než loop implementace. Pro větší grid poté
+roste lineárně čas výpočtu.
+
+V případě silného škálování lze u implementace octree vidět, že při vstupní velikosti
+10 a 20 nastal z důvodu špatného poměru mezi prací a režií. Tudíž u tohoto vstupu již nemá
+smysl přidávat další vlákna. Oběma implementacím pro větší úlohy s rostoucím počtem vláken 
+klesá celková doba výpočtu. Obecně je stromová implementace rychlejší ve všech testovaných 
+případech.
+
+Z grafů slabého škálování je vidět, že u octree roste čas výpočtu s rostoucím počtem
+vláken. U loop implementace je tato závislost čistě klesající. Celkově si vedla z 
+hlediska času lépe implementace octree.
+
+
+2) V jakém případě (v závislosti na počtu bodů ve vstupním souboru a velikosti
+   mřížky) bude vaše řešení 1. úlohy neefektivní? (pokud takový případ existuje)
+
+V případě malého vstupního gridu a velkého počtu vláken. Vlákna nebudou mít dostatek práce
+pro výpočet a poroste režie.
+
+
+3) Je (nebo není) stromový algoritmus efektivnější z pohledu slabého škálování 
+   vzhledem ke vstupu?
+
+Algoritmus tree není efektivníější vzhledem k slabému škálování, jelikož
+se neškáluje tak dobře vzhledem ke všem vstupům.
+
+
+4) Jaký je rozdíl mezi silným a slabým škálováním?
+
+Silné škálování říká, jak se vyvijí doba výpočtu v čase (fixní velikost úlohy) a zajímá nás
+změna času dle počtu vláken. Slabé škálování má fixní čas a snaží se spočítat, co nejvíc
+práce. Práce by měla růst lineárně s počtem vláken.
+
+
+Úloha 4: Analýza využití jader pomocí VTune
+================================================================================
+
+1) Jaké bylo průměrné využití jader pro všechny tři implementace s omezením na 
+   18 vláken? Na kolik procent byly využity?
+   
+   ref: 2.8% (0.997 out of 36 logical CPUs)
+   loop: 48.4% (17.413 out of 36 logical CPUs)
+   tree: 42.9% (16.37 out of 36 logical CPUs)
+
+2) Jaké bylo průměrné využití jader pro všechny tři implementace s využitím 
+   všech jader? Na kolik procent se podařilo využít obě CPU?
+   
+   ref: 2.8% (0.997 out of 36 logical CPUs)
+   loop: 91.4% (32.889 out of 36 logical CPUs)
+   tree: 69.3% (28.876 out of 36 logical CPUs)
+
+3) Jaké jsou závěry z těchto měření?
+
+Tree implementace si i přes menší využití jader vedla lépe než loop. To je způsobeno tím, 
+že se v tree implementaci až tolik nečeká na dokončení práce jiným vláknem. Zároveň tree
+implementace může odřezat až několik bloků, pro které se v loop implementaci zbytečně dělá
+výpočet i když neobsahují žádný iso povrch.
