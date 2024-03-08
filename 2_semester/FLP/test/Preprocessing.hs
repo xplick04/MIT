@@ -21,9 +21,8 @@ countSpaceSequences (x:xs) i
 stripInput:: String -> String
 stripInput [] = []
 stripInput (x:xs)
-    | x `elem` y = ' ' : stripInput xs
+    | x `elem` ['\n', '-'] = ' ' : stripInput xs
     | otherwise = x : stripInput xs 
-    where y = ['\n', '-']
 
 
 makeTuples :: [String] -> [Int] -> Either String [NodeTuple]
@@ -37,3 +36,17 @@ makeTuples ("Leaf":y:ys) (lvl:lvls) =
         Left err -> Left err
         Right rest -> Right ((Leaf, y, "", (lvl `div` 2)) : rest)
 makeTuples _ _ = Left "Invalid input file format."
+
+
+modifyInput2 :: String -> String
+modifyInput2 [] = []
+modifyInput2 (x:xs)
+    | x == ',' = ' ' : modifyInput2 xs
+    | otherwise = x : modifyInput2 xs
+
+getInput2List :: [String] -> [[String]]
+getInput2List [] = []
+getInput2List (x:xs) = words x : getInput2List xs
+
+convertString2Num :: [[String]] -> [[Float]]
+convertString2Num = map (map read)

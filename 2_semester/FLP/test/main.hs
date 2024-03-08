@@ -24,25 +24,33 @@ main = do
     
     case parsedArgs of
         Arguments 1 input1 input2 -> do
-            fileHandle <- openFile input1 ReadMode
-            contents <- hGetContents fileHandle
-            let inputM = modifyInput contents
+            f1 <- openFile input1 ReadMode
+            f2 <- openFile input2 ReadMode
+            c1 <- hGetContents f1
+            c2 <- hGetContents f2
+            
+
+
+            --input1 processing
+            let inputM = modifyInput c1
             let nodeLevels = countSpaceSequences inputM 0
             let strippedInput = stripInput inputM
                 list = words strippedInput
-
             case makeTuples list nodeLevels of
                 Left err -> putStrLn err
                 Right tuples -> do
-                    let b = helper tuples 1
-
-                    print (tuples)
-                    --print (a)
-                    --print (getElem b 1)
-                    --print (getElem b 2)
                     let tree = makeTree tuples
-                    printTree tree
-            hClose fileHandle
+                    --printTree tree
+
+                    --input2 processing
+                    let input2M = modifyInput2 c2
+                    let a = lines input2M
+                    let b = getInput2List a
+                    let c = convertString2Num b
+                    printResult1 c tree
+
+            hClose f1
+            hClose f2
 
         Arguments 2 input1 input2 -> putStrLn "Task 2"
 

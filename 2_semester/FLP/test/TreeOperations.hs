@@ -1,6 +1,7 @@
 module TreeOperations where
 
 import DataTypes
+import Text.Read (readMaybe)
 
 getNodeLvl:: NodeTuple -> Int
 getNodeLvl (_,_,_,x) = x
@@ -23,23 +24,40 @@ getElem (x,_) 2 = reverse x
 getElem (_,y) 1 = reverse y 
 getElem _ _ = []
 
+
 helper :: [NodeTuple] -> Int -> ([NodeTuple], [NodeTuple])  
 helper x y = splitList2 (reverse x) (y + 1)
 
 
-makeTree :: [NodeTuple] -> BTree String String
+makeTree :: [NodeTuple] -> BTree
 makeTree [] = EmptyBTree
-makeTree ((Node, x, y, lvl):xs) = BNode x y (makeTree (getElem (helper xs lvl) 1) ) (makeTree (getElem (helper xs lvl) 2))
-makeTree ((Leaf, x, _, lvl):xs) = BLeaf x
-makeTree _ = EmptyBTree
+makeTree ((Node, x, y, lvl):xs) = BNode (read x) (read y) (makeTree (getElem (helper xs lvl) 1)) (makeTree (getElem (helper xs lvl) 2))
+makeTree ((Leaf, x, _, _):_) = BLeaf x
 
 
-printTree :: BTree String String -> IO ()
+printTree :: BTree -> IO ()
 printTree EmptyBTree = putStrLn ""
 printTree (BNode x y l r) = do
-    putStrLn $ "Node " ++ x ++ " " ++ y
+    putStrLn $ "Node " ++ (show x) ++ " " ++ (show y)
     printTree l
     printTree r
 printTree (BLeaf x) = putStrLn $ "Leaf " ++ x
 
 
+--function calls findTree for each element
+printResult1 :: [[Float]] -> BTree -> IO ()
+printResult1 [] _ = pure ()
+printResult1 (x:xs) y = do
+    putStrLn (findTree x y)
+    printResult1 xs y  
+
+
+findTree :: [Float] -> BTree -> String
+findTree _ EmptyBTree = "Could not find class for data"  -- Handle the case of an empty tree
+findTree x (BNode i0 t0 left right)
+    | i0 < length x = 
+        if x !! i0 > t0
+            then findTree x right
+            else findTree x left
+    | otherwise = ""  -- Handle out-of-bound index
+findTree _ (BLeaf i) = show i  -- Convert the float value to a string
