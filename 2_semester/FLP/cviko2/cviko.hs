@@ -36,8 +36,8 @@ KtreeInsert k (KNode k0 v0 Ktree k1 k1 Ktree k2 v2)
 KtreeElem :: (Ord k) => k -> KTree k v -> Mabye v
 ktreeElem k EmptyTree _ = Nothing
 KtreeElem k (KNode k0 v0 Ktree k1 k1 Ktree k2 v2)
-    | k < k0 =  k (k1 k1)
-    | k > k0 =  k (k2 k2)
+    | k < k0 =  KtreeElem (k1 k1)
+    | k > k0 =  KtreeElem (k2 k2)
     | k == k0 = Just 
 
 
