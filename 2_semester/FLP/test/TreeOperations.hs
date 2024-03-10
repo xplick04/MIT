@@ -1,7 +1,6 @@
 module TreeOperations where
 
 import DataTypes
-import Text.Read (readMaybe)
 
 getNodeLvl:: NodeTuple -> Int
 getNodeLvl (_,_,_,x) = x
@@ -30,9 +29,10 @@ helper x y = splitList2 (reverse x) (y + 1)
 
 
 makeTree :: [NodeTuple] -> BTree
-makeTree [] = EmptyBTree
 makeTree ((Node, x, y, lvl):xs) = BNode (read x) (read y) (makeTree (getElem (helper xs lvl) 1)) (makeTree (getElem (helper xs lvl) 2))
 makeTree ((Leaf, x, _, _):_) = BLeaf x
+makeTree _ = EmptyBTree
+
 
 
 printTree :: BTree -> IO ()
@@ -59,5 +59,5 @@ findTree x (BNode i0 t0 left right)
         if x !! i0 > t0
             then findTree x right
             else findTree x left
-    | otherwise = ""  -- Handle out-of-bound index
+    | otherwise = "Index is out of bound"  -- Handle out-of-bound index
 findTree _ (BLeaf i) = show i  -- Convert the float value to a string

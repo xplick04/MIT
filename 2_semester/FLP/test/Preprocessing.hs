@@ -1,7 +1,8 @@
 module Preprocessing where
 
 import DataTypes
-
+import qualified Data.Text as T (stripSuffix, pack, unpack)
+import Data.List
 
 modifyInput :: String -> String
 modifyInput [] = []
@@ -18,10 +19,18 @@ countSpaceSequences (x:xs) i
     | otherwise = countSpaceSequences xs (i)
 
 
+--removes \n at the end of the input tree file if it is there
+removeEndNewline :: String -> String
+removeEndNewline str =
+    case T.stripSuffix (T.pack "\n") (T.pack str) of
+        Just trimmedStr -> T.unpack trimmedStr
+        Nothing -> str
+
+
 stripInput:: String -> String
 stripInput [] = []
 stripInput (x:xs)
-    | x `elem` ['\n', '-'] = ' ' : stripInput xs
+    | x `elem` ['\n', '-', ','] = ' ' : stripInput xs
     | otherwise = x : stripInput xs 
 
 
@@ -38,15 +47,21 @@ makeTuples ("Leaf":y:ys) (lvl:lvls) =
 makeTuples _ _ = Left "Invalid input file format."
 
 
-modifyInput2 :: String -> String
-modifyInput2 [] = []
-modifyInput2 (x:xs)
-    | x == ',' = ' ' : modifyInput2 xs
-    | otherwise = x : modifyInput2 xs
+--TASK 2
 
-getInput2List :: [String] -> [[String]]
-getInput2List [] = []
-getInput2List (x:xs) = words x : getInput2List xs
+createDato :: [String] -> Dato
+createDato strList =
+    let features = map read (init strList)
+        label = last strList
+    in (features, label)
 
-convertString2Num :: [[String]] -> [[Float]]
-convertString2Num = map (map read)
+
+calculateMidPoint :: [Float] -> [Float]
+calculateMidPoint [] = []
+calculateMidPoint [_] = []
+calculateMidPoint (x:y:ys) = ((x + y) / 2) : calculateMidPoint (y:ys) 
+
+
+
+
+

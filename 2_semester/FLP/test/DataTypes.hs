@@ -9,9 +9,13 @@ data Arguments = Arguments {
 } deriving (Show, Eq)
 
 
-data NodeType = Node | Leaf deriving (Show, Eq)
+data NodeType = Node | Leaf | EndFileChar deriving (Show, Eq)
 
 type NodeTuple = (NodeType, String, String, Int)
 
 --data BTree i t = EmptyBTree | BNode i t (BTree i t) (BTree i t) | BLeaf i deriving (Show, Eq)
 data BTree = EmptyBTree | BNode Int Float BTree BTree | BLeaf String deriving (Show, Eq)
+
+type Dato = ([Float], String)
+
+type Dataset = [Dato]
