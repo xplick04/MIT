@@ -17,5 +17,3 @@ type NodeTuple = (NodeType, String, String, Int)
 data BTree = EmptyBTree | BNode Int Float BTree BTree | BLeaf String deriving (Show, Eq)
 
 type Dato = ([Float], String)
-
-type Dataset = [Dato]

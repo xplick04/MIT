@@ -51,12 +51,23 @@ main = do
             f1 <- openFile input1 ReadMode
             c1 <- hGetContents f1
             let dataset = map createDato (map words (map stripInput (lines c1)))
-            print (map fst dataset)
-            let vectors = map sort (transpose (map fst dataset))
-            print (vectors)
-            let midPoints = map calculateMidPoint vectors
-            print (midPoints)
+            print (dataset)
+
+            let sortedVector = (map sort (transpose (map fst dataset))) !! 0
+            --print (sortedVector)
+            let midPoints = calculateMidPoint (nub sortedVector) --map nub removes duplicate values
+            --print (midPoints)
+            let uniqueLabels = nub (map snd dataset)
+            let lesser = map (\midPoint -> filterByMidPoint midPoint "under" dataset) midPoints
+            --print (lesser)
+            -- [Label1 in first lesser, label2 in first lesser,..]
+            let lesserCount = transpose (map (\label -> map (\elem -> countLabel elem label) lesser) uniqueLabels)
             
-            
+            let giniOfFirstMidPoints = calculateGini (map ())
+
+
+            {-
+            let datasetNext = map dropFirstNumber dataset
+            --print ((map fst dataset))-}
             hClose f1
         _ -> putStrLn "Invalid input"

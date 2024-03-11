@@ -62,6 +62,44 @@ calculateMidPoint [_] = []
 calculateMidPoint (x:y:ys) = ((x + y) / 2) : calculateMidPoint (y:ys) 
 
 
+countLabel :: [Dato] -> String -> Int
+countLabel dataset label = length $ filter (\(_, b) -> b == label) dataset
+
+-- 1 - (Class_count/count of less)
+giniOfLess :: [Dato] -> (Float, Int)
+giniOfLess dataset =
+    let uniqueLabels = nub (map snd dataset)
+    let lesser = map (\midPoint -> filterByMidPoint midPoint "under" dataset) midPoints
+    let lesserCount = transpose (map (\label -> map (\elem -> countLabel elem label) lesser) uniqueLabels)
+    let countOfLess = length dataset
+        in 1 - 
 
 
+-- 1 - (Class_count/count of less)
+--giniOfGreater :: [Dato] -> [String] -> (Float, Int)
+--giniOGreater dataset uniqueLabels
+
+
+
+-- (totalOfLess/Total)*GiniOfLess + (totalOfGreater/Total)*giniOfGreater
+calculateGini :: (Float, Int) -> (Float, Int) -> Float
+calculateGini (a,b) (c,d) = (((b' / (b' + d')) * a) + ((d' / (b' + d')) * c))
+    where
+        b' = fromIntegral b
+        d' = fromIntegral d
+
+--split dataset based of midpoints in float array
+--splitDataset :: [Dato] -> [Float] -> ([Dato], [Dato])
+
+
+dropFirstNumber :: Dato -> Dato
+dropFirstNumber ((_:rest), label) = (rest, label)
+
+
+filterByMidPoint :: Float -> String ->[Dato] -> [Dato]
+filterByMidPoint midPoint "under" dataset =
+    filter (\(features, label) -> (features !! 0) < midPoint) dataset
+filterByMidPoint midPoint "over" dataset =
+    filter (\(features, label) -> (features !! 0) > midPoint) dataset
+filterByMidPoint _ _ _ = []
 
