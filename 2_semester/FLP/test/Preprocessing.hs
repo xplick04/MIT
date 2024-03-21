@@ -65,11 +65,6 @@ calculateMidPoint (x:y:ys) = ((x + y) / 2) : calculateMidPoint (y:ys)
 countLabel :: [Dato] -> String -> Float
 countLabel dataset label = fromIntegral (length $ filter (\(_, b) -> b == label) dataset)
 
-
-dropFirstNumber :: Dato -> Dato
-dropFirstNumber ((_:rest), label) = (rest, label)
-
-
 filterByMidPoint :: Float -> String ->[Dato] -> [Dato]
 filterByMidPoint midPoint "under" dataset =
     filter (\(features, label) -> (features !! 0) < midPoint) dataset
@@ -77,10 +72,60 @@ filterByMidPoint midPoint "over" dataset =
     filter (\(features, label) -> (features !! 0) > midPoint) dataset
 filterByMidPoint _ _ _ = []
 
+
 getFeatureBestMP :: [Float] -> [Float] -> Int -> (Float, Float, Int)
-getFeatureBestMP [] _ _ = (1,0,0)
+getFeatureBestMP [] _ idx = (1,0,idx)
 getFeatureBestMP (x:xs) (y:ys) idx = 
-    let (bestImpurity, mp, index) = getFeatureBestMP xs ys (idx + 1)
+    let (bestImpurity, mp, index) = getFeatureBestMP xs ys idx
     in if x < bestImpurity
         then (x, y, idx)
         else (bestImpurity, mp, index)
+
+
+calculateFeatureBestMP :: [Dato] -> Int -> (Float, Float, Int)
+calculateFeatureBestMP dataset featureIdx = bestMidPoint
+  where
+    uniqueLabels = nub (map snd dataset)    
+    sortedVector = (map sort (transpose (map fst dataset))) !! 0
+    midPoints = calculateMidPoint (nub sortedVector)
+    lesser = map (\midPoint -> filterByMidPoint midPoint "under" dataset) midPoints
+    greater = map (\midPoint -> filterByMidPoint midPoint "over" dataset) midPoints
+    lesserCount = transpose (map (\label -> map (\lst -> countLabel lst label) lesser) uniqueLabels)
+    greaterCount = transpose (map (\label -> map (\grt -> countLabel grt label) greater) uniqueLabels)
+    px = map (\sublist -> map (\x -> (x / fromIntegral (length sublist)) ** 2) sublist) lesserCount
+    py = map (\sublist -> map (\x -> (x / fromIntegral (length sublist)) ** 2) sublist) greaterCount
+    giniX = map sum px
+    giniY = map sum py
+    giniImpurityX = zipWith (\x g -> x - g) [1,1..] giniX
+    giniImpurityY = zipWith (\x g -> x - g) [1,1..] giniY
+    countInLesserSubset = map sum lesserCount
+    countInGreaterSubset = map sum greaterCount
+    total = zipWith (\x g -> x + g) countInGreaterSubset countInLesserSubset
+    weightedImpurity = zipWith5 (\l g t x y -> (l/t) * x + (g/t) * y) countInLesserSubset countInGreaterSubset total giniImpurityX giniImpurityY
+    bestMidPoint = getFeatureBestMP weightedImpurity midPoints featureIdx
+
+
+getFeaturesBestMPs :: [Dato] -> Int -> [(Float, Float, Int)]
+getFeaturesBestMPs dataset idx
+    | idx > numFeatures = []    
+    | True = (calculateFeatureBestMP dataset idx) : getFeaturesBestMPs (map dropFirstFeature dataset) (idx+1)
+  where
+    numFeatures = length (fst (head dataset))
+
+
+
+dropFirstFeature :: Dato -> Dato
+dropFirstFeature ((_:rest), label) = (rest, label)
+dropFirstFeature (_, label) = ([], label)
+
+
+getBestTuple :: [(Float, Float, Int)] -> (Float, Float, Int) -> (Float, Float, Int)
+getBestTuple [] y = y
+getBestTuple (x@(x1, _, _) : xs) y@(y1, _, _) 
+    | x1 > y1 = getBestTuple xs x
+    | otherwise = getBestTuple xs y
+
+
+-- second arg is best mp(impurity, MP, index), TODO impurity not needed
+splitDataset :: [Dato] -> (Float, Float, Int) -> ([Dato], [Dato])
+splitDataset d (_, mp, idx) = partition (\x -> (((fst x) !! idx) > mp)) d

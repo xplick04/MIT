@@ -50,53 +50,14 @@ main = do
             f1 <- openFile input1 ReadMode
             c1 <- hGetContents f1
             let dataset = map createDato (map words (map stripInput (lines c1)))
-            --print (dataset)
+            print dataset
+            let bestMPs = getFeaturesBestMPs dataset 0
+            print bestMPs
+            let bestMP = getBestTuple bestMPs (0,0,0)
+            print bestMP
+            let splitted = splitDataset dataset bestMP
+            print (fst splitted)
+            print (snd splitted)
 
-            let sortedVector = (map sort (transpose (map fst dataset))) !! 0
-            --print (sortedVector)
-            let midPoints = calculateMidPoint (nub sortedVector) --map nub removes duplicate values
-            --print (midPoints)
-            let uniqueLabels = nub (map snd dataset)
-            --print (uniqueLabels)
-            
-            let lesser = map (\midPoint -> filterByMidPoint midPoint "under" dataset) midPoints
-            let greater = map (\midPoint -> filterByMidPoint midPoint "over" dataset) midPoints
-
-            
-            let lesserCount = transpose (map (\label -> map (\lst -> countLabel lst label) lesser) uniqueLabels)
-            let greaterCount = transpose (map (\label -> map (\grt -> countLabel grt label) greater) uniqueLabels)
-            --print (lesserCount)
-
-            let px = map (\sublist -> map (\x -> (x / fromIntegral (length sublist)) ** 2) sublist) lesserCount
-            let py = map (\sublist -> map (\x -> (x / fromIntegral (length sublist)) ** 2) sublist) greaterCount
-
-            --print (px)
-            let giniX = map sum px
-            let giniY = map sum py
-
-            --print (giniX)
-            let giniImpurityX = zipWith (\x g -> x - g) [1,1..] giniX
-            let giniImpurityY = zipWith (\x g -> x - g) [1,1..] giniY
-            print $ "X:" ++ (show giniImpurityX)
-            print $ "Y:" ++ (show giniImpurityY)
-
-            let countInLesserSubset = map sum lesserCount
-            let countInGreaterSubset = map sum greaterCount
-            print $ "G:" ++ (show countInLesserSubset)
-            print $ "L:" ++ (show countInGreaterSubset)
-
-            let total = zipWith (\x g -> x + g) countInGreaterSubset countInLesserSubset
-            print (total)
-
-            let weightedImpurity = zipWith5 (\l g t x y -> (l/t) * x + (g/t) * y) countInLesserSubset countInGreaterSubset total giniImpurityX giniImpurityY
-            print (weightedImpurity)
-
-            print (midPoints)
-
-            let bestMidPoint = getFeatureBestMP weightedImpurity midPoints 0
-        
-            {-
-            let datasetNext = map dropFirstNumber dataset
-            --print ((map fst dataset))-}
             hClose f1
         _ -> putStrLn "Invalid input"
