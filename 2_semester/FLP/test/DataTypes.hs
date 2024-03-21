@@ -9,14 +9,17 @@ data Arguments = Arguments {
 
 
 -- TASK 1
-data NodeType = Node | Leaf | EndFileChar deriving (Show, Eq)
 
-type NodeTuple = (NodeType, String, String, Int)
+type Level = Int
+type TreshHold = Float
+type Class = String
+type Index = Int
+
+data Tuple = Node Level Index Float | Leaf Level Class deriving (Show)
 
 
 -- TASK 2
-data BTree = EmptyBTree | BNode Int Float BTree BTree | BLeaf String deriving (Eq)
-
+data BTree = EmptyBTree | BNode Index TreshHold BTree BTree | BLeaf Class deriving (Eq)
 
 instance Show BTree where
     show tree = showTree tree 0
@@ -34,7 +37,6 @@ instance Show BTree where
                         "\n" ++ helper
             showTree (BLeaf x) s = "\n" ++ replicate (s * 2) ' ' ++ "Leaf " ++ show x
 
-
+type Impurity = Float
 type Dato = ([Float], String)
-
-type MidPoint = (Float, Float, Int)
+type MidPoint = (Impurity, TreshHold, Index)

@@ -5,22 +5,30 @@ import DataTypes
 import qualified Data.Text as T (stripSuffix, pack, unpack)
 import Data.List (minimumBy, nub, partition, sort)
 import Data.Ord (comparing)
+import Data.Either (isLeft, isRight)
 
 
-modifyInput :: String -> String
-modifyInput [] = []
-modifyInput [x] = [x]
-modifyInput (x:y:xs)
-    | x `elem` [',', ':'] = '-' : modifyInput xs --remove extra space after ',', ':'
-    | otherwise = x : modifyInput (y:xs)
+countStartSpaces :: String -> Int
+countStartSpaces [] = 0
+countStartSpaces (x:xs)
+    | x == ' ' = 1 + countStartSpaces xs
+    | otherwise = 0
 
-countSpaceSequences :: String -> Int -> [Int]
-countSpaceSequences [] i = [i] --end of file
-countSpaceSequences (x:xs) i
-    | x == ' ' = countSpaceSequences xs (i + 1)
-    | x == '\n' = i : countSpaceSequences xs 0
-    | otherwise = countSpaceSequences xs (i)
+makeTupleNode :: [String] -> Int -> Either String Tuple
+makeTupleNode [_, idx, tresh] lvl = Right (Node (lvl `div` 2) (read idx) (read tresh))
+makeTupleNode _ _ = Left "Wrong node format."
 
+
+makeTupleLeaf :: [String] -> Int -> Either String Tuple
+makeTupleLeaf [_, classs] lvl = Right (Leaf (lvl `div` 2) classs)
+makeTupleLeaf _ _ = Left "Wrong leaf format."
+
+
+makeTuple :: [String] -> Int -> Either String Tuple
+makeTuple s@(x:_) lvl
+    | x == "Node" = makeTupleNode s lvl
+    | x == "Leaf" = makeTupleLeaf s lvl
+    | otherwise = Left "Unknown format in input file 1."
 
 --removes \n at the end of the input tree file if it is there
 removeEndNewline :: String -> String
@@ -30,42 +38,43 @@ removeEndNewline str =
         Nothing -> str
 
 
-stripInput:: String -> String
-stripInput [] = []
-stripInput (x:xs)
-    | x `elem` ['\n', '-', ','] = ' ' : stripInput xs
-    | otherwise = x : stripInput xs 
+getTuples :: String -> Either String [Tuple]
+getTuples c = 
+    let
+        l = lines (removeEndNewline c)
+        spacesCount = map countStartSpaces l
+        tuples = map (\(line, count) -> makeTuple line count) (zip (map words (map stripInput l)) spacesCount)
+    in case filter isLeft tuples of
+        (Left err : _) -> Left err
+        _ -> Right (map (\(Right x) -> x) tuples)
 
-
-makeTuples :: [String] -> [Int] -> Either String [NodeTuple]
-makeTuples [] [] = Right []
-makeTuples ("Node":y:z:zs) (lvl:lvls) =
-    case makeTuples zs lvls of
-        Left err -> Left err
-        Right rest -> Right ((Node, y, z, (lvl `div` 2)) : rest)
-makeTuples ("Leaf":y:ys) (lvl:lvls) =
-    case makeTuples ys lvls of
-        Left err -> Left err
-        Right rest -> Right ((Leaf, y, "", (lvl `div` 2)) : rest)
-makeTuples _ _ = Left "Invalid input file format."
-
+createDato1 :: [String] -> [Float]
+createDato1 x = map read x
 
 --TASK 2
 
-createDato :: [String] -> Dato
-createDato strList =
+stripInput:: String -> String
+stripInput [] = []
+stripInput (x:xs)
+    | x `elem` ['\n', '-', ',', ':'] = ' ' : stripInput xs
+    | otherwise = x : stripInput xs 
+
+
+-- Creates one dato
+createDato2 :: [String] -> Dato
+createDato2 strList =
     let features = map read (init strList)
         label = last strList
     in (features, label)
 
-
+-- Calculates midpoints for one feature
 calculateMidPoint :: [Float] -> [Float]
 calculateMidPoint [] = []
 calculateMidPoint [_] = []
 calculateMidPoint (x:y:ys) = ((x + y) / 2) : calculateMidPoint (y:ys) 
 
 
-
+-- Splits dataset based of midPoint and first feature value
 filterByMidPoint :: Float -> String -> [Dato] -> [Dato]
 filterByMidPoint midPoint "under" dataset =
     filter (\(features, _) -> (features !! 0) <= midPoint) dataset
@@ -74,8 +83,9 @@ filterByMidPoint midPoint "over" dataset =
 filterByMidPoint _ _ _ = []
 
 
-getFeatureBestMP :: [Float] -> [Float] -> Int -> MidPoint
-getFeatureBestMP [] _ idx = (1.0, 0.0, idx)
+getFeatureBestMP :: [Impurity] -> [TreshHold] -> Int -> MidPoint
+getFeatureBestMP [] _ idx = (1.0, 0.0, idx) -- default value
+getFeatureBestMP _ [] idx = (1.0, 0.0, idx) -- default value
 getFeatureBestMP (x:xs) (y:ys) idx = 
     let (bestImpurity, mp, index) = getFeatureBestMP xs ys idx
     in if x < bestImpurity then (x, y, idx)
@@ -116,12 +126,13 @@ getFeaturesBestMPs dataset idx
         numFeatures = length (fst (head dataset))
 
 
-
+-- Drop first feature in dato
 dropFirstFeature :: Dato -> Dato
 dropFirstFeature ((_:rest), label) = (rest, label)
 dropFirstFeature (_, label) = ([], label)
 
 
+-- Get best midPoint out of one column
 getBestTuple :: [MidPoint] -> MidPoint
 getBestTuple x = gbt x (-1.0, 0.0, 0)
     where
@@ -130,7 +141,7 @@ getBestTuple x = gbt x (-1.0, 0.0, 0)
             | x1 > y1 = gbt xs first
             | otherwise = gbt xs second
 
-
+-- Split dataset based on midPoint
 splitDataset :: [Dato] -> (Int, Float) -> ([Dato], [Dato])
 splitDataset d (idx, mp) = partition (\x -> (((fst x) !! idx) < mp)) d
 

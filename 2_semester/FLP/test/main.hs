@@ -3,7 +3,7 @@ import Preprocessing
 import TreeOperations
 
 import System.IO
-import System.Environment
+import System.Environment (getArgs)
 
 parseArgs :: [String] -> Arguments -> Int -> Arguments -- user input list, parsed arguments, argument number -> parsed arguments
 parseArgs [] args _ = args  -- end case
@@ -23,34 +23,29 @@ main = do
     case parsedArgs of
         Arguments 1 input1 input2 -> do
             f1 <- openFile input1 ReadMode
-            f2 <- openFile input2 ReadMode
             c1 <- hGetContents f1
+            f2 <- openFile input2 ReadMode
             c2 <- hGetContents f2
-            --input1 processing
-            let inputM = removeEndNewline (modifyInput c1)
-            let nodeLevels = countSpaceSequences inputM 0
-            let s = stripInput inputM
-                list = words s
-            case makeTuples list nodeLevels of
-                Left err -> putStrLn err
+
+            let result = getTuples c1
+            case result of
                 Right tuples -> do
-                    let tree = makeTree tuples
-                    --input2 processing
-                    let input2M = map (\x -> if x == ',' then ' ' else x) c2
-                    let a = lines input2M
-                    let b = map words a
-                    let c = map (map read) b
-                    printResult1 c tree
+                    let tree = buildTree1 tuples
+                    let dataset = map createDato1 (map words (map stripInput (lines c2)))
+                    printResult1 dataset tree
+                Left err -> print err
+      
             hClose f1
             hClose f2
 
         Arguments 2 input1 _ -> do
-            --putStrLn "Task 2"
             f1 <- openFile input1 ReadMode
             c1 <- hGetContents f1
-            let dataset = map createDato (map words (map stripInput (lines c1)))
-            let tree = buildTree dataset
-            print tree
 
+            let dataset = map createDato2 (map words (map stripInput (lines c1)))
+            let tree = buildTree2 dataset
+
+            print tree
             hClose f1
+
         _ -> putStrLn "Invalid input"
