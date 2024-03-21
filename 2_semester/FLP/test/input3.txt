@@ -1,4 +1,4 @@
-2.4,1.3,TridaA
-6.1,0.3,TridaB
+2.4,1.3,TridaB
+6.1,0.3,TridaA
 6.3,4.4,TridaC
-2.9,2.2,TridaA
+2.9,2.2,TridaD

@@ -1,6 +1,9 @@
 module TreeOperations where
 
 import DataTypes
+import Preprocessing
+
+import Data.List (nub)
 
 getNodeLvl:: NodeTuple -> Int
 getNodeLvl (_,_,_,x) = x
@@ -34,16 +37,6 @@ makeTree ((Leaf, x, _, _):_) = BLeaf x
 makeTree _ = EmptyBTree
 
 
-
-printTree :: BTree -> IO ()
-printTree EmptyBTree = putStrLn "ET"
-printTree (BNode x y l r) = do
-    putStrLn $ "Node " ++ (show x) ++ " " ++ (show y)
-    printTree l
-    printTree r
-printTree (BLeaf x) = putStrLn $ "Leaf " ++ x
-
-
 --function calls findTree for each element
 printResult1 :: [[Float]] -> BTree -> IO ()
 printResult1 [] _ = pure ()
@@ -61,3 +54,36 @@ findTree x (BNode i0 t0 left right)
             else findTree x left
     | otherwise = "Index is out of bound"  -- Handle out-of-bound index
 findTree _ (BLeaf i) = show i  -- Convert the float value to a string
+
+
+-- TASK 2
+
+buildTree :: [Dato] -> BTree
+buildTree [] = EmptyBTree
+buildTree [d] = BLeaf (snd d)
+buildTree d = (makeNode d)
+
+
+makeLeaf :: Dato -> BTree
+makeLeaf d = BLeaf (snd d)
+
+
+makeNode :: [Dato] -> BTree
+makeNode d =
+    let uniqueLabels = nub (map snd d)  
+        idx = third (getBestTuple (getFeaturesBestMPs d 0))
+        mp = second (getBestTuple (getFeaturesBestMPs d 0))
+        left = buildTree (fst (splitDataset d (idx, mp)))
+        right = buildTree (snd (splitDataset d (idx, mp)))
+    in if (length uniqueLabels == 1) then makeLeaf (d !! 0)
+        else BNode idx mp left right
+
+
+first :: MidPoint -> Float
+first (a,_,_) = a
+
+second :: MidPoint -> Float
+second (_,a,_) = a
+
+third :: MidPoint -> Int
+third (_,_,a) = a

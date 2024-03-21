@@ -4,7 +4,6 @@ import TreeOperations
 
 import System.IO
 import System.Environment
-import Data.List
 
 parseArgs :: [String] -> Arguments -> Int -> Arguments -- user input list, parsed arguments, argument number -> parsed arguments
 parseArgs [] args _ = args  -- end case
@@ -49,11 +48,9 @@ main = do
             --putStrLn "Task 2"
             f1 <- openFile input1 ReadMode
             c1 <- hGetContents f1
-            let dataset2 = map createDato (map words (map stripInput (lines c1)))
-            print dataset2
-
-            let tree = buildTree dataset2
-            printTree tree
+            let dataset = map createDato (map words (map stripInput (lines c1)))
+            let tree = buildTree dataset
+            print tree
 
             hClose f1
         _ -> putStrLn "Invalid input"
