@@ -67,7 +67,7 @@ countLabel dataset label = fromIntegral (length $ filter (\(_, b) -> b == label)
 
 filterByMidPoint :: Float -> String ->[Dato] -> [Dato]
 filterByMidPoint midPoint "under" dataset =
-    filter (\(features, label) -> (features !! 0) < midPoint) dataset
+    filter (\(features, label) -> (features !! 0) <= midPoint) dataset
 filterByMidPoint midPoint "over" dataset =
     filter (\(features, label) -> (features !! 0) > midPoint) dataset
 filterByMidPoint _ _ _ = []
@@ -87,13 +87,13 @@ calculateFeatureBestMP dataset featureIdx = bestMidPoint
   where
     uniqueLabels = nub (map snd dataset)    
     sortedVector = (map sort (transpose (map fst dataset))) !! 0
-    midPoints = calculateMidPoint (nub sortedVector)
+    midPoints = calculateMidPoint sortedVector
     lesser = map (\midPoint -> filterByMidPoint midPoint "under" dataset) midPoints
     greater = map (\midPoint -> filterByMidPoint midPoint "over" dataset) midPoints
     lesserCount = transpose (map (\label -> map (\lst -> countLabel lst label) lesser) uniqueLabels)
     greaterCount = transpose (map (\label -> map (\grt -> countLabel grt label) greater) uniqueLabels)
-    px = map (\sublist -> map (\x -> (x / fromIntegral (length sublist)) ** 2) sublist) lesserCount
-    py = map (\sublist -> map (\x -> (x / fromIntegral (length sublist)) ** 2) sublist) greaterCount
+    px = map (\sublist -> map (\x -> (x / (sum sublist)) ** 2) sublist) lesserCount
+    py = map (\sublist -> map (\x -> (x / (sum sublist)) ** 2) sublist) greaterCount
     giniX = map sum px
     giniY = map sum py
     giniImpurityX = zipWith (\x g -> x - g) [1,1..] giniX
@@ -127,5 +127,40 @@ getBestTuple (x@(x1, _, _) : xs) y@(y1, _, _)
 
 
 -- second arg is best mp(impurity, MP, index), TODO impurity not needed
-splitDataset :: [Dato] -> (Float, Float, Int) -> ([Dato], [Dato])
-splitDataset d (_, mp, idx) = partition (\x -> (((fst x) !! idx) > mp)) d
+splitDataset :: [Dato] -> (Int, Float) -> ([Dato], [Dato])
+splitDataset d (idx, mp) = partition (\x -> (((fst x) !! idx) < mp)) d
+
+
+--todo remake to either error if empty or tree
+buildTree :: [Dato] -> BTree
+buildTree [] = EmptyBTree
+buildTree [d] = (makeLeaf d)
+buildTree d = (makeNode d)
+
+
+makeLeaf :: Dato -> BTree
+makeLeaf d = BLeaf (snd d)
+
+
+makeNode :: [Dato] -> BTree
+makeNode d =
+    let 
+    impurity = first (getBestTuple (getFeaturesBestMPs d 0) (-1,0,0))
+    uniqueLabels = nub (map snd d)  
+    idx = third (getBestTuple (getFeaturesBestMPs d 0) (-1,0,0))
+    mp = second (getBestTuple (getFeaturesBestMPs d 0) (-1,0,0))
+    left = buildTree (fst (splitDataset d (idx, mp)))
+    right = buildTree (snd (splitDataset d (idx, mp)))
+    in if impurity == 0 && (length uniqueLabels == 1) then makeLeaf (d !! 0)
+        else BNode idx mp left right
+
+
+second :: (Float, Float, Int) -> Float
+second (_,a,_) = a
+
+
+third :: (Float, Float, Int) -> Int
+third (_,_,a) = a
+
+first :: (Float, Float, Int) -> Float
+first (a,_,_) = a

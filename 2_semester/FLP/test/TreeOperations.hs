@@ -36,7 +36,7 @@ makeTree _ = EmptyBTree
 
 
 printTree :: BTree -> IO ()
-printTree EmptyBTree = putStrLn ""
+printTree EmptyBTree = putStrLn "ET"
 printTree (BNode x y l r) = do
     putStrLn $ "Node " ++ (show x) ++ " " ++ (show y)
     printTree l

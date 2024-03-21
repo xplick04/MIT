@@ -49,15 +49,11 @@ main = do
             --putStrLn "Task 2"
             f1 <- openFile input1 ReadMode
             c1 <- hGetContents f1
-            let dataset = map createDato (map words (map stripInput (lines c1)))
-            print dataset
-            let bestMPs = getFeaturesBestMPs dataset 0
-            print bestMPs
-            let bestMP = getBestTuple bestMPs (0,0,0)
-            print bestMP
-            let splitted = splitDataset dataset bestMP
-            print (fst splitted)
-            print (snd splitted)
+            let dataset2 = map createDato (map words (map stripInput (lines c1)))
+            print dataset2
+
+            let tree = buildTree dataset2
+            printTree tree
 
             hClose f1
         _ -> putStrLn "Invalid input"
