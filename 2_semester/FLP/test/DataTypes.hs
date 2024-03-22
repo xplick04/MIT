@@ -15,7 +15,7 @@ type TreshHold = Float
 type Class = String
 type Index = Int
 
-data Tuple = Node Level Index Float | Leaf Level Class deriving (Show)
+data Tuple = Node Level Index TreshHold | Leaf Level Class deriving (Show)
 
 
 -- TASK 2
@@ -35,7 +35,14 @@ instance Show BTree where
                         helper
                     else 
                         "\n" ++ helper
-            showTree (BLeaf x) s = "\n" ++ replicate (s * 2) ' ' ++ "Leaf " ++ show x
+            showTree (BLeaf x) s = 
+                let 
+                    helper2 = replicate (s * 2) ' ' ++ "Leaf " ++ show x
+                in
+                    if s == 0 then
+                        helper2
+                    else 
+                        "\n" ++ helper2
 
 type Impurity = Float
 type Dato = ([Float], String)

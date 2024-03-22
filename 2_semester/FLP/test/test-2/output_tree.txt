@@ -1,0 +1,193 @@
+Node 0 147.2995
+  Node 0 3.1415
+    Leaf "TridaA"
+    Node 0 146.009
+      Node 0 145.1535
+        Node 0 141.9945
+          Node 0 140.991
+            Node 0 3.3860002
+              Leaf "TridaB"
+              Node 0 5.3875
+                Leaf "TridaB"
+                Node 0 9.8575
+                  Leaf "TridaB"
+                  Node 0 12.7275
+                    Leaf "TridaA"
+                    Node 0 13.361
+                      Leaf "TridaC"
+                      Node 0 14.446
+                        Leaf "TridaD"
+                        Node 0 16.052
+                          Leaf "TridaB"
+                          Node 0 17.421001
+                            Leaf "TridaB"
+                            Node 0 18.231499
+                              Leaf "TridaB"
+                              Node 0 18.718498
+                                Leaf "TridaD"
+                                Node 0 18.898499
+                                  Leaf "TridaC"
+                                  Node 0 19.55
+                                    Leaf "TridaB"
+                                    Node 0 20.2285
+                                      Leaf "TridaD"
+                                      Node 0 21.8345
+                                        Leaf "TridaB"
+                                        Node 0 23.835
+                                          Leaf "TridaD"
+                                          Node 0 24.793
+                                            Leaf "TridaD"
+                                            Node 0 26.003
+                                              Leaf "TridaB"
+                                              Node 0 27.3045
+                                                Leaf "TridaC"
+                                                Node 0 29.3045
+                                                  Leaf "TridaD"
+                                                  Node 1 145.6105
+                                                    Node 0 32.433
+                                                      Leaf "TridaA"
+                                                      Node 0 34.563004
+                                                        Leaf "TridaA"
+                                                        Node 0 35.93
+                                                          Leaf "TridaC"
+                                                          Node 1 144.7555
+                                                            Node 1 143.584
+                                                              Node 1 141.602
+                                                                Node 0 37.501
+                                                                  Leaf "TridaB"
+                                                                  Node 0 38.47
+                                                                    Leaf "TridaA"
+                                                                    Node 0 39.5875
+                                                                      Leaf "TridaD"
+                                                                      Node 0 40.672
+                                                                        Leaf "TridaA"
+                                                                        Node 0 43.877
+                                                                          Leaf "TridaB"
+                                                                          Node 0 47.1245
+                                                                            Leaf "TridaD"
+                                                                            Node 0 49.1715
+                                                                              Leaf "TridaB"
+                                                                              Node 0 51.114998
+                                                                                Leaf "TridaC"
+                                                                                Node 0 54.030502
+                                                                                  Leaf "TridaD"
+                                                                                  Node 0 56.761
+                                                                                    Leaf "TridaB"
+                                                                                    Node 0 57.190002
+                                                                                      Leaf "TridaA"
+                                                                                      Node 0 58.2185
+                                                                                        Leaf "TridaB"
+                                                                                        Node 0 59.0595
+                                                                                          Leaf "TridaB"
+                                                                                          Node 0 59.4105
+                                                                                            Leaf "TridaC"
+                                                                                            Node 0 60.127
+                                                                                              Leaf "TridaB"
+                                                                                              Node 0 138.3415
+                                                                                                Node 2 146.748
+                                                                                                  Node 0 61.4075
+                                                                                                    Leaf "TridaA"
+                                                                                                    Node 0 63.531
+                                                                                                      Leaf "TridaC"
+                                                                                                      Node 0 65.837006
+                                                                                                        Leaf "TridaB"
+                                                                                                        Node 0 136.891
+                                                                                                          Node 0 135.78351
+                                                                                                            Node 0 134.1415
+                                                                                                              Node 0 67.712006
+                                                                                                                Leaf "TridaD"
+                                                                                                                Node 2 140.008
+                                                                                                                  Node 0 68.6935
+                                                                                                                    Leaf "TridaA"
+                                                                                                                    Node 0 68.8155
+                                                                                                                      Leaf "TridaA"
+                                                                                                                      Node 0 69.1475
+                                                                                                                        Leaf "TridaC"
+                                                                                                                        Node 0 70.111496
+                                                                                                                          Leaf "TridaA"
+                                                                                                                          Node 0 72.1455
+                                                                                                                            Leaf "TridaD"
+                                                                                                                            Node 2 138.913
+                                                                                                                              Node 0 73.6535
+                                                                                                                                Leaf "TridaD"
+                                                                                                                                Node 0 73.879
+                                                                                                                                  Leaf "TridaD"
+                                                                                                                                  Node 0 75.031494
+                                                                                                                                    Leaf "TridaD"
+                                                                                                                                    Node 0 76.3535
+                                                                                                                                      Leaf "TridaD"
+                                                                                                                                      Node 0 77.17551
+                                                                                                                                        Leaf "TridaA"
+                                                                                                                                        Node 0 78.214005
+                                                                                                                                          Leaf "TridaB"
+                                                                                                                                          Node 0 80.2165
+                                                                                                                                            Leaf "TridaA"
+                                                                                                                                            Node 0 83.847
+                                                                                                                                              Leaf "TridaD"
+                                                                                                                                              Node 0 88.92999
+                                                                                                                                                Leaf "TridaA"
+                                                                                                                                                Node 2 124.2495
+                                                                                                                                                  Node 0 90.949
+                                                                                                                                                    Leaf "TridaD"
+                                                                                                                                                    Node 0 93.6315
+                                                                                                                                                      Leaf "TridaD"
+                                                                                                                                                      Node 0 96.2345
+                                                                                                                                                        Leaf "TridaC"
+                                                                                                                                                        Node 0 97.7855
+                                                                                                                                                          Leaf "TridaB"
+                                                                                                                                                          Node 0 98.5125
+                                                                                                                                                            Leaf "TridaA"
+                                                                                                                                                            Node 0 98.901
+                                                                                                                                                              Leaf "TridaD"
+                                                                                                                                                              Node 0 103.8395
+                                                                                                                                                                Leaf "TridaA"
+                                                                                                                                                                Node 0 106.088
+                                                                                                                                                                  Leaf "TridaD"
+                                                                                                                                                                  Node 0 106.8345
+                                                                                                                                                                    Leaf "TridaC"
+                                                                                                                                                                    Node 0 108.5065
+                                                                                                                                                                      Leaf "TridaB"
+                                                                                                                                                                      Node 0 110.2745
+                                                                                                                                                                        Leaf "TridaC"
+                                                                                                                                                                        Node 0 113.6305
+                                                                                                                                                                          Leaf "TridaA"
+                                                                                                                                                                          Node 0 114.84
+                                                                                                                                                                            Leaf "TridaD"
+                                                                                                                                                                            Node 0 115.8955
+                                                                                                                                                                              Leaf "TridaD"
+                                                                                                                                                                              Node 0 117.863
+                                                                                                                                                                                Leaf "TridaD"
+                                                                                                                                                                                Node 0 119.3265
+                                                                                                                                                                                  Leaf "TridaD"
+                                                                                                                                                                                  Node 1 14.008499
+                                                                                                                                                                                    Leaf "TridaC"
+                                                                                                                                                                                    Node 2 97.459
+                                                                                                                                                                                      Node 0 125.603
+                                                                                                                                                                                        Leaf "TridaB"
+                                                                                                                                                                                        Node 1 87.7825
+                                                                                                                                                                                          Node 0 127.312
+                                                                                                                                                                                            Leaf "TridaD"
+                                                                                                                                                                                            Node 0 129.176
+                                                                                                                                                                                              Leaf "TridaA"
+                                                                                                                                                                                              Node 0 130.87451
+                                                                                                                                                                                                Leaf "TridaC"
+                                                                                                                                                                                                Leaf "TridaD"
+                                                                                                                                                                                          Leaf "TridaB"
+                                                                                                                                                                                      Leaf "TridaA"
+                                                                                                                                                  Leaf "TridaB"
+                                                                                                                              Leaf "TridaB"
+                                                                                                                  Leaf "TridaB"
+                                                                                                              Leaf "TridaB"
+                                                                                                            Leaf "TridaC"
+                                                                                                          Leaf "TridaA"
+                                                                                                  Leaf "TridaB"
+                                                                                                Leaf "TridaB"
+                                                                Leaf "TridaA"
+                                                              Leaf "TridaC"
+                                                            Leaf "TridaA"
+                                                    Leaf "TridaC"
+            Leaf "TridaC"
+          Leaf "TridaA"
+        Leaf "TridaD"
+      Leaf "TridaA"
+  Leaf "TridaC"

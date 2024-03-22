@@ -5,7 +5,8 @@ import DataTypes
 import qualified Data.Text as T (stripSuffix, pack, unpack)
 import Data.List (minimumBy, nub, partition, sort)
 import Data.Ord (comparing)
-import Data.Either (isLeft, isRight)
+import Data.Either (isLeft)
+
 
 
 countStartSpaces :: String -> Int
@@ -68,14 +69,14 @@ createDato2 strList =
     in (features, label)
 
 -- Calculates midpoints for one feature
-calculateMidPoint :: [Float] -> [Float]
+calculateMidPoint :: [Float] -> [TreshHold]
 calculateMidPoint [] = []
 calculateMidPoint [_] = []
 calculateMidPoint (x:y:ys) = ((x + y) / 2) : calculateMidPoint (y:ys) 
 
 
 -- Splits dataset based of midPoint and first feature value
-filterByMidPoint :: Float -> String -> [Dato] -> [Dato]
+filterByMidPoint :: TreshHold -> String -> [Dato] -> [Dato]
 filterByMidPoint midPoint "under" dataset =
     filter (\(features, _) -> (features !! 0) <= midPoint) dataset
 filterByMidPoint midPoint "over" dataset =
@@ -95,17 +96,17 @@ getFeatureBestMP (x:xs) (y:ys) idx =
 -- Calculate impurity at a given midpoint for a given subset
 getMidPointImpurity :: [Dato] -> Float
 getMidPointImpurity subset =
-    let labels = nub (map snd subset)
+    let uniqueLabels = nub (map snd subset)
         countForLabel label = length (filter (\(_, l) -> l == label) subset)
-        totalCount = sum (map countForLabel labels)
-        px = map (\label -> (fromIntegral (countForLabel label) / fromIntegral totalCount) ** 2) labels
+        totalCount = sum (map countForLabel uniqueLabels)
+        px = map (\label -> (fromIntegral (countForLabel label) / fromIntegral totalCount) ** 2) uniqueLabels
     in 1 - sum px
 
 
 -- Calculate best midpoint for a feature in the dataset
 calculateFeatureBestMP :: [Dato] -> Int -> MidPoint
 calculateFeatureBestMP dataset featureIdx =
-    let sortedValues = sort (map (!! featureIdx) (map fst dataset))
+    let sortedValues = nub (sort (map (!! featureIdx) (map fst dataset))) --remove identical feature values
         midPoints = calculateMidPoint sortedValues
         impurities = map (\midPoint -> getMidPointImpurity (filterByMidPoint midPoint "under" dataset) 
                                       + getMidPointImpurity (filterByMidPoint midPoint "over" dataset)) midPoints
@@ -134,14 +135,13 @@ dropFirstFeature (_, label) = ([], label)
 
 -- Get best midPoint out of one column
 getBestTuple :: [MidPoint] -> MidPoint
-getBestTuple x = gbt x (-1.0, 0.0, 0)
+getBestTuple x = gbt x (10.0, 0.0, 0)
     where
         gbt [] y = y
         gbt ( first@(x1, _, _) : xs ) second@(y1, _, _) 
-            | x1 > y1 = gbt xs first
+            | x1 < y1 = gbt xs first
             | otherwise = gbt xs second
 
 -- Split dataset based on midPoint
-splitDataset :: [Dato] -> (Int, Float) -> ([Dato], [Dato])
+splitDataset :: [Dato] -> (Index, TreshHold) -> ([Dato], [Dato])
 splitDataset d (idx, mp) = partition (\x -> (((fst x) !! idx) < mp)) d
-

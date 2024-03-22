@@ -4,6 +4,7 @@ import TreeOperations
 
 import System.IO
 import System.Environment (getArgs)
+import Data.List (minimumBy, nub, partition, sort)
 
 parseArgs :: [String] -> Arguments -> Int -> Arguments -- user input list, parsed arguments, argument number -> parsed arguments
 parseArgs [] args _ = args  -- end case
@@ -22,8 +23,10 @@ main = do
     
     case parsedArgs of
         Arguments 1 input1 input2 -> do
+            -- Input file 1
             f1 <- openFile input1 ReadMode
             c1 <- hGetContents f1
+            -- Input file 2
             f2 <- openFile input2 ReadMode
             c2 <- hGetContents f2
 
@@ -34,7 +37,7 @@ main = do
                     let dataset = map createDato1 (map words (map stripInput (lines c2)))
                     printResult1 dataset tree
                 Left err -> print err
-      
+
             hClose f1
             hClose f2
 
@@ -44,8 +47,8 @@ main = do
 
             let dataset = map createDato2 (map words (map stripInput (lines c1)))
             let tree = buildTree2 dataset
-
             print tree
+            
             hClose f1
 
         _ -> putStrLn "Invalid input"
