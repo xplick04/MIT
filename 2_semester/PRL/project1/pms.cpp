@@ -23,7 +23,7 @@ enum Tag {
 // Class for each proccess
 class Node 
 {
-    protected:
+    private:
         std::queue<unsigned char> queueTop;
         std::queue<unsigned char> queueBottom;
         int cntTop;
