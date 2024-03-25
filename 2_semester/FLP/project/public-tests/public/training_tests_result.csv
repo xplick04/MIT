@@ -1,0 +1,4 @@
+dataset,split,train_accuracy,test_accuracy,reference_train_accuracy,reference_test_accuracy,test_difference,train_time
+penguins_all.csv,0, 1.000, 1.000, 1.000, 1.000, 0.000, 1.313
+penguins_all.csv,0.25, 1.000, 0.964, 1.000, 0.976, 0.012, 0.672
+penguins_all.csv,0.5, 1.000, 0.946, 1.000, 0.958, 0.012, 0.372

@@ -1,0 +1,1733 @@
+Node 2 207.5
+  Node 0 45.15
+    Node 0 44.6
+      Node 0 32.6
+        Leaf Adelie
+        Node 0 33.3
+          Leaf Adelie
+          Node 0 33.75
+            Leaf Adelie
+            Node 0 34.2
+              Leaf Adelie
+              Node 0 34.45
+                Leaf Adelie
+                Node 0 34.55
+                  Leaf Adelie
+                  Node 0 43.8
+                    Node 0 43.35
+                      Node 1 15.95
+                        Leaf Adelie
+                        Node 1 16.05
+                          Leaf Adelie
+                          Node 1 16.150002
+                            Leaf Adelie
+                            Node 1 16.35
+                              Leaf Adelie
+                              Node 2 173.0
+                                Leaf Adelie
+                                Node 2 175.0
+                                  Leaf Adelie
+                                  Node 2 177.0
+                                    Leaf Adelie
+                                    Node 2 204.0
+                                      Node 2 202.5
+                                        Node 3 4737.5
+                                          Node 3 4687.5
+                                            Node 3 4662.5
+                                              Node 3 4625.0
+                                                Node 3 4550.0
+                                                  Node 3 4487.5
+                                                    Node 3 4462.5
+                                                      Node 0 34.8
+                                                        Leaf Adelie
+                                                        Node 0 35.05
+                                                          Leaf Adelie
+                                                          Node 0 35.199997
+                                                            Leaf Adelie
+                                                            Node 0 35.4
+                                                              Leaf Adelie
+                                                              Node 0 35.55
+                                                                Leaf Adelie
+                                                                Node 0 35.65
+                                                                  Leaf Adelie
+                                                                  Node 1 16.55
+                                                                    Leaf Adelie
+                                                                    Node 1 21.150002
+                                                                      Node 1 20.900002
+                                                                        Node 1 20.650002
+                                                                          Node 1 20.55
+                                                                            Node 1 20.4
+                                                                              Node 1 20.2
+                                                                                Node 1 20.05
+                                                                                  Node 2 179.0
+                                                                                    Leaf Adelie
+                                                                                    Node 2 201.5
+                                                                                      Node 2 200.5
+                                                                                        Node 2 199.5
+                                                                                          Node 0 35.800003
+                                                                                            Leaf Adelie
+                                                                                            Node 0 35.95
+                                                                                              Leaf Adelie
+                                                                                              Node 2 198.5
+                                                                                                Node 3 2875.0
+                                                                                                  Leaf Adelie
+                                                                                                  Node 1 16.75
+                                                                                                    Leaf Chinstrap
+                                                                                                    Node 0 43.15
+                                                                                                      Node 0 42.949997
+                                                                                                        Node 0 42.75
+                                                                                                          Node 0 42.6
+                                                                                                            Node 0 42.300003
+                                                                                                              Leaf Adelie
+                                                                                                              Leaf Chinstrap
+                                                                                                            Leaf Adelie
+                                                                                                          Leaf Adelie
+                                                                                                        Leaf Adelie
+                                                                                                      Leaf Adelie
+                                                                                                Leaf Adelie
+                                                                                          Leaf Adelie
+                                                                                        Leaf Adelie
+                                                                                      Leaf Adelie
+                                                                                  Leaf Adelie
+                                                                                Leaf Adelie
+                                                                              Leaf Adelie
+                                                                            Leaf Adelie
+                                                                          Leaf Adelie
+                                                                        Leaf Adelie
+                                                                      Leaf Adelie
+                                                      Leaf Adelie
+                                                    Leaf Adelie
+                                                  Leaf Adelie
+                                                Leaf Adelie
+                                              Leaf Adelie
+                                            Leaf Adelie
+                                          Leaf Adelie
+                                        Leaf Adelie
+                                      Leaf Adelie
+                      Leaf Chinstrap
+                    Leaf Adelie
+      Leaf Gentoo
+    Node 3 4612.5
+      Node 1 21.15
+        Node 3 4575.0
+          Node 0 56.9
+            Node 0 55.0
+              Node 0 53.85
+                Node 0 53.15
+                  Node 0 52.75
+                    Node 0 52.45
+                      Node 0 52.1
+                        Node 1 16.45
+                          Leaf Chinstrap
+                          Node 1 16.55
+                            Leaf Chinstrap
+                            Node 1 20.15
+                              Node 1 19.95
+                                Node 2 181.5
+                                  Leaf Chinstrap
+                                  Node 2 186.0
+                                    Leaf Chinstrap
+                                    Node 2 204.5
+                                      Node 3 2975.0
+                                        Leaf Chinstrap
+                                        Node 1 16.7
+                                          Leaf Chinstrap
+                                          Node 0 45.300003
+                                            Leaf Chinstrap
+                                            Node 0 45.45
+                                              Leaf Chinstrap
+                                              Node 0 45.55
+                                                Leaf Chinstrap
+                                                Node 0 45.65
+                                                  Leaf Chinstrap
+                                                  Node 1 16.9
+                                                    Leaf Chinstrap
+                                                    Node 1 17.05
+                                                      Leaf Chinstrap
+                                                      Node 0 45.75
+                                                        Leaf Chinstrap
+                                                        Node 0 45.85
+                                                          Leaf Adelie
+                                                          Leaf Chinstrap
+                                      Leaf Chinstrap
+                                Leaf Chinstrap
+                              Leaf Chinstrap
+                        Leaf Chinstrap
+                      Leaf Chinstrap
+                    Leaf Chinstrap
+                  Leaf Chinstrap
+                Leaf Chinstrap
+              Leaf Chinstrap
+            Leaf Chinstrap
+          Leaf Adelie
+        Leaf Adelie
+      Leaf Gentoo
+  Node 1 18.95
+    Node 1 17.65
+      Leaf Gentoo
+      Leaf Adelie
+    Leaf Chinstrap
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Node 1 16.349998
+  Node 0 39.7
+    Leaf Adelie
+    Leaf Gentoo
+  Node 0 44.65
+    Node 0 33.75
+      Leaf Adelie
+      Node 0 34.2
+        Leaf Adelie
+        Node 0 34.45
+          Leaf Adelie
+          Node 0 34.55
+            Leaf Adelie
+            Node 0 34.949997
+              Leaf Adelie
+              Node 0 35.4
+                Leaf Adelie
+                Node 0 35.55
+                  Leaf Adelie
+                  Node 0 35.65
+                    Leaf Adelie
+                    Node 1 16.55
+                      Leaf Adelie
+                      Node 2 173.0
+                        Leaf Adelie
+                        Node 2 176.0
+                          Leaf Adelie
+                          Node 2 179.0
+                            Leaf Adelie
+                            Node 2 209.0
+                              Node 0 43.8
+                                Node 0 43.35
+                                  Node 2 206.5
+                                    Node 2 204.0
+                                      Node 2 202.5
+                                        Node 2 201.5
+                                          Node 2 200.5
+                                            Node 3 4725.0
+                                              Node 0 43.15
+                                                Node 0 42.949997
+                                                  Node 0 42.65
+                                                    Node 3 4662.5
+                                                      Node 3 4625.0
+                                                        Node 3 4550.0
+                                                          Node 3 4487.5
+                                                            Node 0 42.35
+                                                              Leaf Adelie
+                                                              Leaf Chinstrap
+                                                            Leaf Adelie
+                                                          Leaf Adelie
+                                                        Leaf Adelie
+                                                      Leaf Adelie
+                                                    Leaf Adelie
+                                                  Leaf Adelie
+                                                Leaf Adelie
+                                              Leaf Adelie
+                                            Leaf Adelie
+                                          Leaf Adelie
+                                        Leaf Adelie
+                                      Leaf Adelie
+                                    Leaf Adelie
+                                  Leaf Chinstrap
+                                Leaf Adelie
+                              Leaf Adelie
+    Node 2 217.5
+      Node 1 21.1
+        Node 0 54.65
+          Node 0 53.15
+            Node 0 52.75
+              Node 0 52.45
+                Node 0 52.1
+                  Node 1 16.45
+                    Leaf Chinstrap
+                    Node 1 16.55
+                      Leaf Chinstrap
+                      Node 1 20.5
+                        Node 3 4525.0
+                          Node 1 20.15
+                            Node 1 19.95
+                              Node 2 181.5
+                                Leaf Chinstrap
+                                Node 2 186.0
+                                  Leaf Chinstrap
+                                  Node 2 211.0
+                                    Node 3 2975.0
+                                      Leaf Chinstrap
+                                      Node 1 16.8
+                                        Leaf Chinstrap
+                                        Node 0 45.300003
+                                          Leaf Chinstrap
+                                          Node 0 45.45
+                                            Leaf Chinstrap
+                                            Node 0 45.55
+                                              Leaf Chinstrap
+                                              Node 0 45.65
+                                                Leaf Chinstrap
+                                                Node 1 17.05
+                                                  Leaf Chinstrap
+                                                  Node 0 45.75
+                                                    Leaf Chinstrap
+                                                    Node 0 45.85
+                                                      Leaf Adelie
+                                                      Leaf Chinstrap
+                                    Leaf Chinstrap
+                              Leaf Chinstrap
+                            Leaf Chinstrap
+                          Leaf Adelie
+                        Leaf Chinstrap
+                  Leaf Chinstrap
+                Leaf Chinstrap
+              Leaf Chinstrap
+            Leaf Chinstrap
+          Leaf Chinstrap
+        Leaf Adelie
+      Leaf Gentoo
+Gentoo
+Gentoo
+Adelie
+Gentoo
+Chinstrap
+Chinstrap
+Gentoo
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Adelie
+Adelie
+Gentoo
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Chinstrap
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Adelie
+Chinstrap
+Adelie
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Chinstrap
+Adelie
+Chinstrap
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Gentoo
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Chinstrap
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Chinstrap
+Adelie
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Gentoo
+Chinstrap
+Adelie
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Chinstrap
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Chinstrap
+Chinstrap
+Gentoo
+Chinstrap
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Adelie
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Chinstrap
+Chinstrap
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Chinstrap
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Gentoo
+Gentoo
+Chinstrap
+Adelie
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Node 1 16.4
+  Node 0 36.9
+    Leaf Adelie
+    Leaf Gentoo
+  Node 0 44.65
+    Node 0 33.95
+      Leaf Adelie
+      Node 0 34.45
+        Leaf Adelie
+        Node 0 34.55
+          Leaf Adelie
+          Node 0 34.949997
+            Leaf Adelie
+            Node 0 35.449997
+              Leaf Adelie
+              Node 0 35.65
+                Leaf Adelie
+                Node 0 35.800003
+                  Leaf Adelie
+                  Node 0 35.95
+                    Leaf Adelie
+                    Node 0 36.1
+                      Leaf Adelie
+                      Node 0 43.65
+                        Node 0 36.25
+                          Leaf Adelie
+                          Node 0 42.85
+                            Node 2 206.5
+                              Node 0 36.35
+                                Leaf Adelie
+                                Node 1 16.650002
+                                  Leaf Adelie
+                                  Node 1 16.75
+                                    Leaf Chinstrap
+                                    Node 2 179.0
+                                      Leaf Adelie
+                                      Node 2 180.5
+                                        Leaf Adelie
+                                        Node 2 204.0
+                                          Node 2 201.5
+                                            Node 3 2887.5
+                                              Leaf Adelie
+                                              Node 0 36.45
+                                                Leaf Adelie
+                                                Node 0 36.55
+                                                  Leaf Adelie
+                                                  Node 0 36.9
+                                                    Leaf Adelie
+                                                    Node 0 37.25
+                                                      Leaf Adelie
+                                                      Node 0 37.4
+                                                        Leaf Adelie
+                                                        Node 0 37.55
+                                                          Leaf Adelie
+                                                          Node 0 37.65
+                                                            Leaf Adelie
+                                                            Node 0 37.800003
+                                                              Leaf Adelie
+                                                              Node 0 38.0
+                                                                Leaf Adelie
+                                                                Node 1 16.9
+                                                                  Leaf Adelie
+                                                                  Node 1 17.05
+                                                                    Leaf Adelie
+                                                                    Node 0 38.35
+                                                                      Leaf Adelie
+                                                                      Node 3 3125.0
+                                                                        Leaf Adelie
+                                                                        Node 1 17.150002
+                                                                          Leaf Adelie
+                                                                          Node 3 3225.0
+                                                                            Leaf Adelie
+                                                                            Node 3 3262.5
+                                                                              Leaf Adelie
+                                                                              Node 3 3287.5
+                                                                                Leaf Adelie
+                                                                                Node 3 3325.0
+                                                                                  Leaf Adelie
+                                                                                  Node 3 3387.5
+                                                                                    Leaf Chinstrap
+                                                                                    Node 0 42.45
+                                                                                      Node 0 42.35
+                                                                                        Leaf Adelie
+                                                                                        Leaf Chinstrap
+                                                                                      Leaf Adelie
+                                            Leaf Adelie
+                                          Leaf Adelie
+                              Leaf Adelie
+                            Leaf Adelie
+                        Leaf Adelie
+    Node 2 219.0
+      Node 1 21.1
+        Node 0 45.300003
+          Leaf Chinstrap
+          Node 0 45.45
+            Leaf Chinstrap
+            Node 0 45.55
+              Leaf Chinstrap
+              Node 0 52.45
+                Node 0 52.1
+                  Node 1 16.55
+                    Leaf Chinstrap
+                    Node 1 16.85
+                      Leaf Chinstrap
+                      Node 1 17.3
+                        Leaf Chinstrap
+                        Node 1 17.65
+                          Leaf Chinstrap
+                          Node 1 20.5
+                            Node 1 20.15
+                              Leaf Chinstrap
+                              Leaf Adelie
+                            Leaf Chinstrap
+                  Leaf Chinstrap
+                Leaf Chinstrap
+        Leaf Adelie
+      Leaf Gentoo
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Chinstrap
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Chinstrap
+Adelie
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Gentoo
+Chinstrap
+Adelie
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Chinstrap
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Chinstrap
+Chinstrap
+Gentoo
+Chinstrap
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Adelie
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Chinstrap
+Chinstrap
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Chinstrap
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Chinstrap
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Gentoo
+Gentoo
+Chinstrap
+Adelie
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Gentoo
+Gentoo
+Adelie
+Gentoo
+Chinstrap
+Chinstrap
+Gentoo
+Gentoo
+Adelie
+Adelie
+Adelie
+Adelie
+Adelie
+Chinstrap
+Adelie
+Adelie
+Adelie
+Gentoo
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Chinstrap
+Chinstrap
+Chinstrap
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Gentoo
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Adelie
+Adelie
+Chinstrap
+Gentoo
+Adelie
+Chinstrap
+Adelie
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Adelie
+Adelie
+Gentoo
+Adelie
+Gentoo
+Chinstrap
+Gentoo
+Chinstrap
+Gentoo
+Gentoo
+Gentoo
+Adelie
+Gentoo
+Adelie
+Adelie
+Gentoo
+Chinstrap
+Chinstrap
+Adelie
+Chinstrap
+Chinstrap
+Adelie
+Gentoo
+Gentoo
+Gentoo
+Chinstrap
+Gentoo
+Gentoo

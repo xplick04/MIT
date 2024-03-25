@@ -1,0 +1,43 @@
+Node: 23, 935.49
+  Node: 1, 190.545
+    Leaf: Class2
+    Node: 31, 235.415
+      Node: 38, 451.135
+        Leaf: Class7
+        Node: 6, 899.23
+          Node: 1, 574.795
+            Leaf: Class1
+            Leaf: Class3
+          Leaf: Class9
+      Node: 20, 920.165
+        Node: 13, 267.915
+          Leaf: Class2
+          Node: 7, 898.98
+            Node: 20, 584.29
+              Node: 8, 663.01
+                Node: 0, 569.07
+                  Leaf: Class2
+                  Leaf: Class5
+                Node: 11, 395.52
+                  Leaf: Class8
+                  Node: 3, 528.995
+                    Node: 0, 531.825
+                      Leaf: Class7
+                      Leaf: Class1
+                    Leaf: Class10
+              Node: 15, 827.425
+                Leaf: Class4
+                Node: 0, 540.99
+                  Leaf: Class1
+                  Leaf: Class6
+            Node: 0, 540.54
+              Leaf: Class6
+              Leaf: Class9
+        Node: 2, 402.82
+          Leaf: Class8
+          Leaf: Class3
+  Node: 0, 492.86
+    Node: 0, 458.895
+      Leaf: Class1
+      Leaf: Class4
+    Leaf: Class5

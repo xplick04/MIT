@@ -1,0 +1,55 @@
+Node 0 6.8180003
+  Leaf TridaA
+  Node 0 12.141001
+    Leaf TridaA
+    Node 1 131.882
+      Node 0 26.527
+        Leaf TridaD
+        Node 0 38.0765
+          Leaf TridaD
+          Node 0 40.895
+            Leaf TridaC
+            Node 0 46.6335
+              Leaf TridaA
+              Node 0 53.56
+                Leaf TridaC
+                Node 0 64.1675
+                  Leaf TridaD
+                  Node 0 72.2985
+                    Leaf TridaD
+                    Node 1 114.808
+                      Node 0 73.887
+                        Leaf TridaA
+                        Node 0 74.44
+                          Leaf TridaD
+                          Node 0 145.1495
+                            Node 0 142.80301
+                              Node 0 137.087
+                                Node 0 75.802505
+                                  Leaf TridaB
+                                  Node 1 22.465
+                                    Leaf TridaD
+                                    Node 0 77.548004
+                                      Leaf TridaB
+                                      Node 0 81.419495
+                                        Leaf TridaA
+                                        Node 0 86.397995
+                                          Leaf TridaB
+                                          Node 1 76.4515
+                                            Node 0 99.884995
+                                              Leaf TridaA
+                                              Node 0 102.9395
+                                                Leaf TridaC
+                                                Node 0 110.335
+                                                  Leaf TridaB
+                                                  Node 0 122.162506
+                                                    Leaf TridaB
+                                                    Node 0 129.296
+                                                      Leaf TridaC
+                                                      Leaf TridaB
+                                            Leaf TridaD
+                                Leaf TridaC
+                              Leaf TridaA
+                            Leaf TridaD
+                      Leaf TridaC
+      Leaf TridaA
