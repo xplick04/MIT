@@ -5,8 +5,8 @@ module Preprocessing where
 
 import DataTypes
 
-import qualified Data.Map.Strict as Map
-import Data.List (minimumBy, nub, partition, sort)
+import qualified Data.Map as Map
+import Data.List (minimumBy, nub, partition)
 import Data.Ord (comparing)
 
 
@@ -15,6 +15,7 @@ isLeft' (Left _) = True
 isLeft' (Right _) = False
 
 
+-- Count start spaces to detetmine level of node
 countStartSpaces :: String -> Int
 countStartSpaces [] = 0
 countStartSpaces (x:xs)
@@ -23,12 +24,12 @@ countStartSpaces (x:xs)
 
 
 makeTupleNode :: [String] -> Int -> Either String Tuple
-makeTupleNode [_, idx, tresh] lvl = Right (Node (lvl `div` 2) (read idx) (read tresh))
+makeTupleNode [_, idx, tresh] lvl = Right (Node (lvl `div` 2) (read idx) (read tresh))  -- lvl needs to be devides by 2
 makeTupleNode _ _ = Left "Wrong node format."
 
 
 makeTupleLeaf :: [String] -> Int -> Either String Tuple
-makeTupleLeaf [_, classs] lvl = Right (Leaf (lvl `div` 2) classs)
+makeTupleLeaf [_, classs] lvl = Right (Leaf (lvl `div` 2) classs) -- lvl needs to be devides by 2
 makeTupleLeaf _ _ = Left "Wrong leaf format."
 
 
@@ -43,7 +44,7 @@ makeTuple _ _ = Left "Unknown format in input file 1."
 getTuples :: String -> Either String [Tuple]
 getTuples c = 
     let
-        c' = if last c == '\n' then init c else c   -- delete end \n
+        c' = if last c == '\n' then init c else c   -- delete end \n, otherwise lines create empty list as last elem
         l = lines c'
         spacesCount = map countStartSpaces l
         tuples = map (\(line, count) -> makeTuple line count) (zip (map words (map stripInput l)) spacesCount)
@@ -89,26 +90,18 @@ filterByMidPoint midPoint "over" dataset =
 filterByMidPoint _ _ _ = []
 
 
-getFeatureBestMP :: [Impurity] -> [TreshHold] -> Int -> MidPoint
-getFeatureBestMP [] _ idx = (1.0, 0.0, idx) -- default value
-getFeatureBestMP _ [] idx = (1.0, 0.0, idx) -- default value
-getFeatureBestMP (x:xs) (y:ys) idx = 
-    let (bestImpurity, mp, index) = getFeatureBestMP xs ys idx
-    in if x < bestImpurity then (x, y, idx)
-        else (bestImpurity, mp, index)
-
 
 -- Calculate impurity at a given midpoint for a given subset
 getMidPointImpurity :: [Dato] -> Float
 getMidPointImpurity subset =
-    let labelCounts = foldl (\counts (_, l) -> Map.insertWith (+) l 1 counts) Map.empty subset
-        totalCount = fromIntegral $ sum $ Map.elems labelCounts
-        px = map (\count -> (fromIntegral count / totalCount) ** 2) (Map.elems labelCounts)
+    let labelCounts = foldl (\counts (_, label) -> Map.insertWith (+) label 1 counts) Map.empty subset -- get each label and their counts
+        totalCount = fromIntegral ( sum (Map.elems labelCounts) :: Int)
+        px = map (\count -> (fromIntegral count / totalCount) ** 2) (Map.elems labelCounts) -- compute px for each label
     in 1 - sum px
 
 
 
--- Calculate best midpoint for a feature in the dataset
+-- Calculate best midpoint for feature in the dataset
 calculateFeatureBestMP :: [Dato] -> Int -> MidPoint
 calculateFeatureBestMP dataset featureIdx =
     let midPoints = nub (init ((map (!! 0) (map fst dataset))))
@@ -137,26 +130,25 @@ calculateFeatureBestMP dataset featureIdx =
     in (minImpurity, bestMidPoint, featureIdx)
 
 
-
+-- Get each feature best mid points
 getFeaturesBestMPs :: [Dato] -> [MidPoint]
 getFeaturesBestMPs dataset = gfbMP dataset 0
     where 
-        gfbMP [] _ = []
         gfbMP _ idx
             | idx >= numFeatures = []
         gfbMP d idx =
-            let a@(gini, mp, newIdx) = calculateFeatureBestMP d idx
-            in if gini == 0     -- no need to look for another midpoint
+            let featureValues = map (\dato -> extractFeatureAtIndex dato idx) d
+                a@(gini, mp, newIdx) = calculateFeatureBestMP featureValues idx
+            in if gini == 0
                 then [(gini, mp, newIdx)]
-                else a : gfbMP (map dropFirstFeature d) (idx + 1)
+                else a : gfbMP dataset (idx + 1)
 
         numFeatures = length (fst (head dataset))
 
 
--- Drop first feature in dato
-dropFirstFeature :: Dato -> Dato
-dropFirstFeature ((_:rest), label) = (rest, label)
-dropFirstFeature ([], label) = ([], label)
+-- Extract feature value at a specific index
+extractFeatureAtIndex :: Dato -> Int -> Dato
+extractFeatureAtIndex (features, label) idx = ([features !! idx], label) 
 
 
 -- Get best midPoint out of one column

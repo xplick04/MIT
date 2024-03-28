@@ -78,7 +78,7 @@ makeNode d =
         left = buildTree2 (fst (splitDataset d (idx, mp)))
         right = buildTree2 (snd (splitDataset d (idx, mp)))
     in if (length uniqueLabels == 1) then makeLeaf (d !! 0)
-        else BNode idx mp left right--left right
+        else BNode idx mp left right
 
 
 first :: MidPoint -> Float
@@ -131,4 +131,4 @@ majorityLabel tree =
 getLabels :: BTree -> [String]
 getLabels EmptyBTree = []
 getLabels (BLeaf label) = [label]
-getLabels (BNode _ _ left right) = getLabels left ++ getLabels right
+getLabels (BNode _ _ left right) = (getLabels left) ++ (getLabels right)

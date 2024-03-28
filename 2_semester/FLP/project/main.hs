@@ -49,13 +49,12 @@ main = do
             c1 <- hGetContents f1
 
             let dataset = createDatos2 c1
+
             let tree = buildTree2 dataset
-            print tree
-            {-
+            
             let alpha = 0 --pruning alpha value (0 does nothing, the larger value the more pruning)
             let pruned = pruneTree alpha tree
             print pruned
-            -}
 
             hClose f1
 
