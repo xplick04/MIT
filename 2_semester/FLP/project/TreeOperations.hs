@@ -7,8 +7,8 @@ module TreeOperations where
 import DataTypes
 import Preprocessing
 
-import Data.List (nub)
-
+import Data.List (nub, maximumBy)
+import Data.Ord (comparing)
 
 -- left and right tree gets its subtree nodes by splitting current node into two parts by their level
 -- to do this i reversed current node list and took all nodes untill i reached level of current node children
@@ -36,7 +36,7 @@ listSplit (x:xs) b
         (smaller, other) = listSplit xs b
 
 
-
+-- Build tree for first task
 buildTree1 :: [Tuple] -> BTree
 buildTree1 ((Node lvl x y):xs) = BNode x y (buildTree1 (getElem (helper xs lvl) 1)) (buildTree1 (getElem (helper xs lvl) 2))
     where
@@ -58,6 +58,8 @@ findTree _ (BLeaf i) = i
 
 
 -- TASK 2
+
+-- Build tree for second task
 buildTree2 :: [Dato] -> BTree
 buildTree2 [] = EmptyBTree
 buildTree2 [d] = (makeLeaf d)
@@ -87,3 +89,46 @@ second (_,a,_) = a
 
 third :: MidPoint -> Int
 third (_,_,a) = a
+
+
+
+-- TASK2 - Cost complexity post-pruning
+
+-- Prune if tree complexity is bigger than alpha
+pruneTree :: Int -> BTree -> BTree
+pruneTree alpha tree = let prunedTree = pruneSubtrees alpha tree
+                       in if complexity(tree) > alpha then prunedTree else tree
+
+
+-- Calculate cost of tree
+complexity :: BTree -> Int
+complexity EmptyBTree = 0
+complexity (BLeaf _) = 0
+complexity (BNode _ _ left right) = 1 + (complexity left) + (complexity right)
+
+
+-- Replace node by majority label leaf if complexity is bigger than alpha
+pruneSubtrees :: Int -> BTree -> BTree
+pruneSubtrees _ EmptyBTree = EmptyBTree
+pruneSubtrees _ (BLeaf label) = BLeaf label
+pruneSubtrees alpha curr@(BNode idx mp left right) =
+  let prunedLeft = pruneSubtrees alpha left
+      prunedRight = pruneSubtrees alpha right
+  in if complexity (BNode idx mp left right) > alpha
+        then (BNode idx mp prunedLeft prunedRight)
+        else (BLeaf (majorityLabel curr))
+
+
+-- Get majority label
+majorityLabel :: BTree -> String
+majorityLabel tree =
+    let labels = getLabels tree
+        labelCounts = map (\label -> (label, length (filter (== label) labels))) (nub labels)
+        (best, _) = maximumBy (comparing snd) labelCounts
+    in best
+
+-- Get list of all tree labels
+getLabels :: BTree -> [String]
+getLabels EmptyBTree = []
+getLabels (BLeaf label) = [label]
+getLabels (BNode _ _ left right) = getLabels left ++ getLabels right

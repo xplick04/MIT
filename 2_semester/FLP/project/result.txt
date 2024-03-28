@@ -1,5 +1,0 @@
-Node 0 42.8
-  Leaf Adelie
-  Node 1 17.099998
-    Leaf Gentoo
-    Leaf Chinstrap

@@ -5,6 +5,7 @@ module Preprocessing where
 
 import DataTypes
 
+import qualified Data.Map.Strict as Map
 import Data.List (minimumBy, nub, partition, sort)
 import Data.Ord (comparing)
 
@@ -50,6 +51,7 @@ getTuples c =
         (Left err : _) -> Left err
         _ -> Right (map (\(Right x) -> x) tuples)
 
+
 -- converts float strings into floats
 createDato1 :: [String] -> [Float]
 createDato1 x = map read x
@@ -62,29 +64,28 @@ stripInput (x:xs)
     | x `elem` ['\n', ',', ':'] = ' ' : stripInput xs
     | otherwise = x : stripInput xs 
 
+
 -- Create Datos from input file
 createDatos2 :: String -> [Dato]
 createDatos2 c =
     let 
-        c' = if last c == '\n' then init c else c   -- delete end \n
-        linesList = lines c'
+        --c' = if last c == '\n' then init c else c   -- delete end \n
+        linesList = lines c
         strList = map (words . stripInput) linesList
         createDato strList' = (map read (init strList'), last strList')
     in map createDato strList
-
--- Calculates midpoints for one feature
-calculateMidPoint :: [Float] -> [TreshHold]
-calculateMidPoint [] = []
-calculateMidPoint [_] = []
-calculateMidPoint (x:y:ys) = ((x + y) / 2) : calculateMidPoint (y:ys) 
 
 
 -- Splits dataset based of midPoint and first feature value
 filterByMidPoint :: TreshHold -> String -> [Dato] -> [Dato]
 filterByMidPoint midPoint "under" dataset =
-    filter (\(features, _) -> (features !! 0) <= midPoint) dataset
+    filter (\(features, _) -> case features of
+                                (x:_) -> x <= midPoint
+                                _     -> False) dataset
 filterByMidPoint midPoint "over" dataset =
-    filter (\(features, _) -> (features !! 0) > midPoint) dataset
+    filter (\(features, _) -> case features of
+                                (x:_) -> x > midPoint
+                                _     -> False) dataset
 filterByMidPoint _ _ _ = []
 
 
@@ -100,25 +101,37 @@ getFeatureBestMP (x:xs) (y:ys) idx =
 -- Calculate impurity at a given midpoint for a given subset
 getMidPointImpurity :: [Dato] -> Float
 getMidPointImpurity subset =
-    let uniqueLabels = nub (map snd subset)
-        countForLabel label = length (filter (\(_, l) -> l == label) subset)
-        totalCount = sum (map countForLabel uniqueLabels)
-        px = map (\label -> (fromIntegral (countForLabel label) / fromIntegral totalCount) ** 2) uniqueLabels
+    let labelCounts = foldl (\counts (_, l) -> Map.insertWith (+) l 1 counts) Map.empty subset
+        totalCount = fromIntegral $ sum $ Map.elems labelCounts
+        px = map (\count -> (fromIntegral count / totalCount) ** 2) (Map.elems labelCounts)
     in 1 - sum px
+
 
 
 -- Calculate best midpoint for a feature in the dataset
 calculateFeatureBestMP :: [Dato] -> Int -> MidPoint
 calculateFeatureBestMP dataset featureIdx =
-    let sortedValues = nub (sort (map (!! 0) (map fst dataset))) --remove identical feature values
-        midPoints = calculateMidPoint sortedValues
+    let midPoints = nub (init ((map (!! 0) (map fst dataset))))
         under mp = filterByMidPoint mp "under" dataset 
         over mp = filterByMidPoint mp "over" dataset
         lenUnder mp = fromIntegral (length (under mp))
         lenOver mp = fromIntegral (length (under mp))
-        impurities = map (\mp -> (getMidPointImpurity (under mp)) * (lenUnder mp) / ((lenUnder mp) + (lenOver mp)) + 
-                                (getMidPointImpurity (over mp)) * (lenOver mp) / ((lenUnder mp) + (lenOver mp)) 
-                        ) midPoints
+
+        calculateImpurities [] = []
+        calculateImpurities (mp:mps) =
+            let impurityUnder = getMidPointImpurity (under mp)
+                impurityOver = getMidPointImpurity (over mp)
+                lenUnder' = lenUnder mp
+                lenOver' = lenOver mp
+                totalImpurity = impurityUnder * lenUnder' / (lenUnder' + lenOver') +
+                     impurityOver * lenOver' / (lenUnder' + lenOver')
+
+            in if totalImpurity == 0
+                then [0]  -- No need to look for other
+                else totalImpurity : calculateImpurities mps
+
+        impurities = calculateImpurities midPoints
+
         (minImpurity, minIdx) = minimumBy (comparing fst) (zip impurities [0..])
         bestMidPoint = midPoints !! minIdx
     in (minImpurity, bestMidPoint, featureIdx)
@@ -129,11 +142,13 @@ getFeaturesBestMPs :: [Dato] -> [MidPoint]
 getFeaturesBestMPs dataset = gfbMP dataset 0
     where 
         gfbMP [] _ = []
-        gfbMP _ idx 
+        gfbMP _ idx
             | idx >= numFeatures = []
         gfbMP d idx =
-            let featureBestMP = calculateFeatureBestMP d idx
-            in featureBestMP : gfbMP (map dropFirstFeature d) (idx + 1)
+            let a@(gini, mp, newIdx) = calculateFeatureBestMP d idx
+            in if gini == 0     -- no need to look for another midpoint
+                then [(gini, mp, newIdx)]
+                else a : gfbMP (map dropFirstFeature d) (idx + 1)
 
         numFeatures = length (fst (head dataset))
 
@@ -149,10 +164,11 @@ getBestTuple :: [MidPoint] -> MidPoint
 getBestTuple x = gbt x (10.0, 0.0, 0) -- initial best impurity
     where
         gbt [] y = y
+        gbt ( x1@(0.0, _, _) : _) _ = x1
         gbt ( first@(x1, _, _) : xs ) second@(y1, _, _) 
             | x1 < y1 = gbt xs first
             | otherwise = gbt xs second
 
 -- Split dataset based on midPoint
 splitDataset :: [Dato] -> (Index, TreshHold) -> ([Dato], [Dato])
-splitDataset d (idx, mp) = partition (\x -> (((fst x) !! idx) < mp)) d
+splitDataset d (idx, mp) = partition (\x -> (((fst x) !! idx) <= mp)) d
