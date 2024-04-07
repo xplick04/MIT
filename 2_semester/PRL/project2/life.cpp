@@ -19,13 +19,11 @@ struct BoardInfo
 {
     int rows = 0;
     int cols = 0;
-    int rowStart = 0;
-    int rowEnd = 0;
 };
 
 class Processor 
 {
-    public:
+    private:
     std::vector<int> board; //only for rank 0
     std::vector<std::vector<int>> boardPart;
     std::vector<std::vector<int>> neighbourRows;
@@ -33,12 +31,11 @@ class Processor
     int rank;
     int size;
 
+    public:
     Processor(int rank, int size) : rank(rank), size(size) 
     {
         boardInfo.cols = 0;
         boardInfo.rows = 0;
-        boardInfo.rowStart = 0;
-        boardInfo.rowEnd = 0;
     }
 
     void printBoard()
@@ -94,16 +91,12 @@ class Processor
         MPI_Bcast(&boardInfo.rows, 1, MPI_INT, 0, MPI_COMM_WORLD); // then rows
         board.resize((boardSize / size) + 1);   // + 1 for remainder
 
-        boardInfo.rowStart = rank * boardInfo.rows / size;
-        boardInfo.rowEnd = ((rank + 1) * boardInfo.rows / size) - 1;
-
         std::vector<int> scatterCounts(size);
         int remainder = boardInfo.rows % size;
         int quotient = boardInfo.rows / size;
         for (int i = 0; i < size; ++i) 
         {
             scatterCounts[i] = (i < remainder) ? (quotient + 1) * boardInfo.cols : quotient * boardInfo.cols;
-            //std::cout <<" Scatter count: " << scatterCounts[i] << std::endl;
         }
 
         std::vector<int> offsets(size);
@@ -112,14 +105,12 @@ class Processor
         {   
             offsets[i] = offset;
             offset += scatterCounts[i];
-            //std::cout << "Offset: " << offsets[i] << std::endl;
         }
 
         std::vector<int> receivedData(scatterCounts[rank]);
         MPI_Scatterv(board.data(), scatterCounts.data(), offsets.data(), MPI_INT , receivedData.data(), scatterCounts[rank], MPI_INT, 0, MPI_COMM_WORLD);
 
         deserializeData(receivedData);
-        //printBoard();
     }
 
     void deserializeData(std::vector<int> receivedData)
@@ -163,10 +154,10 @@ class Processor
 
         for (int i = 0; i < 9; i++)
         {
-            tmp = boardPart;
             if (i == 4) continue;   // skip the cell itself
-            int neighbourRow = row + i / 3 - 1;
-            int neighbourCol = col + i % 3 - 1;
+            tmp = boardPart;
+            int neighbourRow = row + i / 3 - 1; // indexation for neighbour
+            int neighbourCol = col + i % 3 - 1; // indexation for neighbour
 
             if(neighbourRow < 0) // upper neighbour
             {
