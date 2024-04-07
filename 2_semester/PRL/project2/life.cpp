@@ -6,14 +6,13 @@
 
 #include <iostream>
 #include <mpi.h>
-#include <cmath>
 #include <vector>
-#include <unistd.h>
-#include <string>
 
 #define ALIVE 1
 #define DEAD 0
 
+#define TOP 0
+#define BOTTOM 1
 
 struct BoardInfo
 {
@@ -161,12 +160,12 @@ class Processor
 
             if(neighbourRow < 0) // upper neighbour
             {
-                neighbourRow = 0;
+                neighbourRow = TOP;
                 tmp = neighbourRows;
             }
             else if(neighbourRow >= boardPart.size()) // lower neighbour
             {
-                neighbourRow = 1;
+                neighbourRow = BOTTOM;
                 tmp = neighbourRows;
             }
 
