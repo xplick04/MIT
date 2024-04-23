@@ -11,7 +11,6 @@ from tqdm import tqdm
 config = {
     'learning_rate' : 0.1,
     'epochs' : 10,
-    'batch_size' : 16, 
     'layer_width' : 8
 }
 
@@ -21,8 +20,6 @@ class MLP(torch.nn.Module):
         super(MLP, self).__init__()
         self.layers = torch.nn.Sequential(
             torch.nn.Linear(input_dim, config['layer_width']),
-            torch.nn.ReLU(),
-            torch.nn.Linear(config['layer_width'], config['layer_width']),
             torch.nn.ReLU(),
             torch.nn.Linear(config['layer_width'], 1),
             torch.nn.Sigmoid()
@@ -38,38 +35,15 @@ class MLP(torch.nn.Module):
         train_x, labels = train_data[:, :-1], train_data[:, -1]
         optimizer = optim.Adam(self.parameters(), lr=config["learning_rate"])
         criterion = torch.nn.BCELoss()
-
-        batch_size = config['batch_size']
-        num_samples = train_data.shape[0]
-        num_batches = num_samples // batch_size
-
+        
         for epoch in range(config["epochs"]):
-            epoch_loss = 0
-            epoch_accuracy = 0
-            # Shuffle data for each epoch
-            indices = torch.randperm(num_samples)
-            train_x_shuffled = train_x[indices]
-            labels_shuffled = labels[indices]
-
-            for batch_idx in range(num_batches):
-                start_idx = batch_idx * batch_size
-                end_idx = min((batch_idx + 1) * batch_size, num_samples)
-                x_batch = train_x_shuffled[start_idx:end_idx]
-                label_batch = labels_shuffled[start_idx:end_idx]
-
-                optimizer.zero_grad()
-                y_batch = self.forward(x_batch)
-                loss = criterion(y_batch.squeeze(), label_batch)  # Rename the variable to avoid overwriting the loss function
-                epoch_loss += loss.item()
-                loss.backward()
-                optimizer.step()
-
-                epoch_accuracy += ((y_batch > 0.5).float() == label_batch).float().mean().item()
-
-            epoch_loss /= num_batches
-            epoch_accuracy /= num_batches
-
-            print(f'Epoch: {epoch}, Loss: {epoch_loss}, Accuracy: {epoch_accuracy*100}%')
+            optimizer.zero_grad()
+            y = self.forward(train_x)
+            loss_value = criterion(y.squeeze(), labels)  # Rename the variable to avoid overwriting the loss function
+            loss_value.backward()
+            optimizer.step()
+            #train_accuracy = ((y > 0.5).float() == labels).float().mean().item()
+            #print(f'Epoch: {epoch}, Loss: {loss_value.item()}, Accuracy: {train_accuracy*100}%')
 
     
     def evaluate_model(self, eval_data):
@@ -86,7 +60,7 @@ class MLP(torch.nn.Module):
 
 
     def cross_validation(self, dataset, input_dim):
-        kf = KFold(n_splits=5, shuffle=True)
+        kf = KFold(n_splits=10, shuffle=True)
         accuracies = []
 
         for foldID, (train_index, test_index) in enumerate(kf.split(dataset)):
