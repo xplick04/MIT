@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import mne
-import json
+import torch
 
 
 """
@@ -14,7 +14,6 @@ import json
 """
 class DataParser:
     dataset = []
-    min_duration = 0
 
     channels_occurrences = {
         'EEG Fp1-LE': 0,
@@ -42,32 +41,23 @@ class DataParser:
     }
 
     def load_dataset(self, dPAth):
-        min_duration = float('inf')
         path = os.path.join(os.getcwd(), dPAth)
+
+        i = 0
         for file in os.listdir(path):
-            if not file.endswith('.edf'):
-                continue
-            filename = os.fsdecode(file)
-            data = mne.io.read_raw_edf(os.path.join(path, filename), preload=True)
-            recording_duration = len(data['EEG Fp1-LE'][1]) / data.info['sfreq']
-
-            self.dataset.append({
-                'Name': filename,
-                'data': data,
-                'label': 0,
-                'label_name': 'Healthy' if 'H' in filename else 'MDD',
-                'recording_duration': recording_duration
-            })
-
-            if recording_duration < min_duration: # get the minimum duration of all recordings for normalization
-                min_duration = recording_duration
-
-        self.min_duration = min_duration
-        
+            if file.endswith(".edf"):
+                filename = os.fsdecode(file)
+                data = mne.io.read_raw_edf(os.path.join(path, filename), preload=True)
+                self.dataset.append({
+                    'Name': filename,
+                    'data': data,
+                    'label': 0 if 'H' in filename else 1,
+                    'label_name': 'Healthy' if 'H' in filename else 'MDD'
+                })
 
     
     def preprocess_data(self):
-
+        
         min_band_value = [float('inf') for i in range(6)] # normalize the data
         max_band_value = [float('-inf') for i in range(6)] # normalize the data
 
@@ -75,38 +65,53 @@ class DataParser:
         for d in self.dataset:
             # Iterate through the channels of each data
             for channel in d['data'].info['ch_names']:
+
                 self.channels_occurrences[channel] += 1
-                # Access the channel data
                 channel_data = d['data'][channel][0][0] # metadata is [1] and data is [0], data inside np.array
                 sfreq = int(d['data'].info['sfreq']) # 256Hz
 
                 if 'signals_data' not in d:
                     d['signals_data'] = {}
 
-                # Compute the PSD of the channel data
-                channel_data = channel_data[:int(self.min_duration * sfreq)] # cut the data to the minimum duration
-                psd = np.abs(np.fft.fft(channel_data))**2 # only positive frequencies
-                frequencies = np.abs(np.fft.fftfreq(len(channel_data), d=1/sfreq)) # one sided spectrum
+                window_size = sfreq * 60 # 60 seconds window
+                channel_bandwidths = []
+                i = 0
+                flag = False
 
-                # Not including frequencies over 50Hz
-                bandwidths = [0,4,8,12,20,30,50]
-                mean_bands_values = []
-                for i in range(len(bandwidths)-1):
-                    band_value = np.mean( psd[(frequencies >= bandwidths[i]) & (frequencies < bandwidths[i+1])] )
-                    mean_bands_values.append(band_value)
-                    if band_value < min_band_value[i]:
-                        min_band_value[i] = band_value
-                    if band_value > max_band_value[i]:
-                        max_band_value[i] = band_value
+                while True:
+                    if (i + 1) * window_size >= len(channel_data):
+                        window_data = channel_data[-window_size:]
+                        flag = True
+                    else:
+                        window_data = channel_data[i * window_size : (i + 1) * window_size]
 
-                d['signals_data'][channel] = np.array(mean_bands_values)  # each channel has 6 values each representing avarage bandwidth power of signal
-            
+                    # Compute the PSD of the channel data
+                    psd = np.abs(np.fft.fft(window_data))**2
+                    frequencies = np.abs(np.fft.fftfreq(len(window_data), d=1/sfreq))
+                    
+                    # Compute mean band values
+                    bandwidths = [0, 4, 8, 12, 20, 30, 50]
+                    mean_bands_values = []
+                    for j in range(len(bandwidths) - 1):
+                        band_value = np.mean( psd[(frequencies >= bandwidths[j]) & (frequencies < bandwidths[j+1])] )
+                        mean_bands_values.append(band_value)
+                        if band_value < min_band_value[j]:
+                            min_band_value[j] = band_value
+                        if band_value > max_band_value[j]:
+                            max_band_value[j] = band_value
+
+                    # Add the computed bandwidths to the dataset
+                    channel_bandwidths.append(mean_bands_values) # shape (n_windows, 6)
+                    i += 1
+                    if flag:
+                        break
+                
+                d['signals_data'][channel] = np.array(channel_bandwidths)
             d.pop('data') # remove original data
 
-        
         max_occurrences = max(self.channels_occurrences.values()) # get the maximum number of occurrences of a channel
 
-       # Find channels with occurrences less than the maximum
+        # Find channels with occurrences less than the maximum
         channels_to_remove = []
         for key in self.channels_occurrences:
             if self.channels_occurrences[key] < max_occurrences:
@@ -118,12 +123,16 @@ class DataParser:
                 if key in d['signals_data']:
                     del d['signals_data'][key]
 
+        
         # Normalize each band data for remaining channels
-        for d in self.dataset:
+        for d in self.dataset: # iterate through the data
             for key in d['signals_data']:
-                for i in range(6):
-                    d['signals_data'][key][i] = (d['signals_data'][key][i] - min_band_value[i]) / (max_band_value[i] - min_band_value[i]) * 100 # normalize to 0-100 range
-            
+                for i in range(len(d['signals_data'][key])):  # Iterate over the first dimension
+                    for j in range(len(d['signals_data'][key][i])):  # Iterate over the second dimension
+                        d['signals_data'][key][i][j] = (d['signals_data'][key][i][j] - min_band_value[j]) / (max_band_value[j] - min_band_value[j]) * 100
+        
+
+
 
     def save_data(self, path):
         filename = "processed_data.npy"
@@ -155,6 +164,4 @@ class DataParser:
                 'signals_data': d[3]
             })
         return data
-            
-    
             

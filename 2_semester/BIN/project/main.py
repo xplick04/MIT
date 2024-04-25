@@ -1,15 +1,13 @@
-from pyedflib import highlevel
-import pyedflib as plib
 import numpy as np
 import matplotlib.pyplot as plt
-import src.dataParser2 as d
+import src.dataParser as d
 import os
 import src.MLP as m
-import src.MLPnoBatch as m2
+import src.SVM as s
 import sys
 
 
-def convert4MLP(dataset):
+def convert(dataset):
     data = []
     for d in dataset:
         merged_channels = None
@@ -39,13 +37,14 @@ if __name__ == "__main__":
 
     elif "--cross_validation" in sys.argv:
         data = parser.load_data("data/processed_data/") #181 files
-        data = convert4MLP(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
-        #m.cross_validation(data)
-        m2.cross_validation(data)
+        data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
+        s.cross_validation(data)
 
     elif "--cgp":
         pass
 
-        
+    # sshfs xplick04@merlin.fit.vutbr.cz:/homes/eva/xp/xplick04/BIN tmp/
+    # fusermount -u tmp/
+
 
             
