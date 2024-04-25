@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 
 
 config = {
-    'learning_rate' : 0.00001,
-    'epochs' : 100,
+    'learning_rate' : 0.0001,
+    'epochs' : 1000,
     'layer_width' : 32,
     'batch_size' : 32
 }
@@ -86,6 +86,7 @@ class MLP(torch.nn.Module):
             loss = criterion(y.squeeze(), labels)
             # Compute accuracy
             predictions = (y > 0.5).float()  # Threshold at 0.5
+            print(predictions)
             val_accuracy = (predictions == labels).float().mean().item()
             return val_accuracy, loss.item()
 
@@ -103,9 +104,9 @@ def cross_validation(dataset):
         train_acc, train_loss = model.train_model(train_data)
         val_accuracy, val_loss = model.evaluate_model(test_data)
         accuracies.append(val_accuracy)
-        plot_data(train_acc)
-        plot_data(train_loss)
-        #print(f'Fold {foldID}, Loss: {val_loss}, Accuracy: {val_accuracy*100}%')
+        plot_data(train_acc, "train_acc")
+        plot_data(train_loss, "train_loss")
+        print(f'Fold {foldID}, Loss: {val_loss}, Accuracy: {val_accuracy*100}%')
         break
 
 
@@ -120,6 +121,7 @@ def get_data(dataset, idx):
     return torch.tensor(data).float()
 
 
-def plot_data(data):
+def plot_data(data, filename):
     plt.plot(data)
-    plt.show()
+    plt.savefig(filename + ".png")
+    plt.close()
