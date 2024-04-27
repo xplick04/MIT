@@ -36,7 +36,7 @@ check_input([H|_]) :- length(H, _), write('Error: invalid input'), nl, halt.
 write_edges_to_db([]).
 write_edges_to_db([[V1,V2]|Edges]) :-
     assert(edge(V1, V2)), % Assert the edge to the database dynamically
-	assert(edge(V2, V1)),
+	assert(edge(V2, V1)), % Assert the edge to the database dynamically
     write_edges_to_db(Edges).
 
 
@@ -46,35 +46,51 @@ get_first_vertex(FirstVertex) :-
 
 get_unique_vertices(UniqueVertices) :-
 	findall(V, edge(V, _), Vertices),
-	list_to_set(Vertices, UniqueVertices).
+	findall(V2, edge(_, V2), Vertices2),
+	append(Vertices, Vertices2, Vertices3),
+	list_to_set(Vertices3, UniqueVertices).
 
 list_to_set([], []).
 list_to_set([H|T], S) :- list_to_set(T, S), member(H, S), !.
 list_to_set([H|T], [H|S]) :- list_to_set(T, S).
 
 
-solve(P) :-
+solve(AllPaths) :-
 	get_first_vertex(FirstVertex), % Get the first vertex
+	setof(Path, search(FirstVertex, [FirstVertex], Path), AllPaths).
+
+
+search(_, Visited,[]) :-
 	get_unique_vertices(UniqueVertices), % Get the unique vertices
-	length(UniqueVertices, Num), % Number of vertices
-	dfs(FirstVertex, [FirstVertex], P1, Num), % 2nd is visited
-	reverse(P1, P). 
+    length(UniqueVertices, U),
+    length(Visited, L),
+    L is U.
+
+search(Current, Visited, Solution2) :- % Maintain the order of the edges
+    edge(Current, Next),
+	Current @< Next,
+    not(member(Next, Visited)),
+	(
+		dfs(Current, [Next | Visited], Solution); % Recursively call for the next vertex
+		dfs(Next, [Next | Visited], Solution)	% Recursively call for the next vertex
+	),
+	sort([(Current, Next) | Solution], Solution2).
+
+search(Current, Visited, Solution2) :-	% Maintain the order of the edges
+    edge(Next, Current),
+	Current @> Next,
+    not(member(Next, Visited)),
+	(
+		search(Current, [Next | Visited],Solution);
+		search(Next, [Next | Visited], Solution)
+	),
+	sort([(Next, Current) | Solution], Solution2).
 
 
-
-dfs(Current, Visited, Solution, UniqueVertices) :-
-	length(Visited, L), L is UniqueVertices. % goal
-
-
-dfs(Current, Visited, Solution, UniqueVertices) :-
-	edge(Current, Next),
-	\+ member(Next, Visited),
-	append(Visited, [Next], NewVisited),
-	dfs(Next, NewVisited, Solution, UniqueVertices).
-
-
-
-
+print_solution([(V1, V2)]):- format('~w-~w\n', [V1, V2]). % Print last edge of solution
+print_solution([(V1, V2)|T]) :-
+	format('~w-~w ', [V1, V2]),
+	print_solution(T).
 
 start :-
     prompt(_, ''),
@@ -84,6 +100,6 @@ start :-
     write_edges_to_db(Edges), % Write the edges to the database
 
 	solve(P), % Solve the problem
-	write(P), nl, % Write the solution
+	forall(member(X, P), print_solution(X)), % Print the solution
 
     halt.
