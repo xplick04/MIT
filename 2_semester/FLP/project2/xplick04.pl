@@ -71,8 +71,8 @@ search(Current, Visited, Solution2) :- % Maintain the order of the edges
 	Current @< Next,
     not(member(Next, Visited)),
 	(
-		dfs(Current, [Next | Visited], Solution); % Recursively call for the next vertex
-		dfs(Next, [Next | Visited], Solution)	% Recursively call for the next vertex
+		search(Current, [Next | Visited], Solution); % Recursively call for the next vertex
+		search(Next, [Next | Visited], Solution)	% Recursively call for the next vertex
 	),
 	sort([(Current, Next) | Solution], Solution2).
 
