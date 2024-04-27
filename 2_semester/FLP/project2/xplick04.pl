@@ -31,28 +31,59 @@ check_input([H|T]) :- length(H, 2), check_input(T).
 check_input([H|_]) :- length(H, _), write('Error: invalid input'), nl, halt.
 
 
-isElement(X, [X|_]).
-isElement(X, [_|T]) :- isElement(X, T).	
+:- dynamic(edge/2). % Declare edge/2 predicate as dynamic
+
+write_edges_to_db([]).
+write_edges_to_db([[V1,V2]|Edges]) :-
+    assert(edge(V1, V2)), % Assert the edge to the database dynamically
+	assert(edge(V2, V1)),
+    write_edges_to_db(Edges).
 
 
-convert_to_list([], []).
-convert_to_list([H|T], L) :- convert_to_list(T, L1), append(H, L1, L).
+get_first_vertex(FirstVertex) :-
+    edge(FirstVertex, _),!. 
 
 
-get_unique([], []).
-get_unique([H|T], L) :- isElement(H, T), get_unique(T, L).
-get_unique([H|T], [H|L]) :- get_unique(T, L).
+get_unique_vertices(UniqueVertices) :-
+	findall(V, edge(V, _), Vertices),
+	list_to_set(Vertices, UniqueVertices).
+
+list_to_set([], []).
+list_to_set([H|T], S) :- list_to_set(T, S), member(H, S), !.
+list_to_set([H|T], [H|S]) :- list_to_set(T, S).
+
+
+solve(P) :-
+	get_first_vertex(FirstVertex), % Get the first vertex
+	get_unique_vertices(UniqueVertices), % Get the unique vertices
+	length(UniqueVertices, Num), % Number of vertices
+	dfs(FirstVertex, [FirstVertex], P1, Num), % 2nd is visited
+	reverse(P1, P). 
+
+
+
+dfs(Current, Visited, Solution, UniqueVertices) :-
+	length(Visited, L), L is UniqueVertices. % goal
+
+
+dfs(Current, Visited, Solution, UniqueVertices) :-
+	edge(Current, Next),
+	\+ member(Next, Visited),
+	append(Visited, [Next], NewVisited),
+	dfs(Next, NewVisited, Solution, UniqueVertices).
+
+
+
 
 
 start :-
-		prompt(_, ''),
-		read_lines(LL),
-		filter_empty(LL,Edges), % filter out empty rows	
-		check_input(Edges),	% check that there are two elements in each row
-		write(Edges),
-		nl,
-		convert_to_list(Edges, List), % convert to one list
-		get_unique(List, Vertices), % get unique vertices
-		
-		nl,
-		halt.
+    prompt(_, ''),
+
+    read_lines(LL),
+    filter_empty(LL, Edges), % filter out empty rows
+    write_edges_to_db(Edges), % Write the edges to the database
+
+	solve(P), % Solve the problem
+	write(P), nl, % Write the solution
+
+    halt.
