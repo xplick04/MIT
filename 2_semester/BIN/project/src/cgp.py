@@ -1,117 +1,123 @@
 import os
 import random
 
-
-# CGP outputs
-outputValues = []
-
 # CGP parameters
 MUTATION_MAX = 5
 # CGP dimensions
-x_size = 2
-y_size = 3
+x_size = 3
+y_size = 2
+lookback = 1 # must be larger than 0, lookback 1 = can see previous column
 
 input_size = 0
 
-class Gate:
-    def __init__(self, x1, x2, op):
-        self.x1 = x1
-        self.x2 = x2
-        self.op = op
-
-    def execute(self):
-        i1 = outputValues[self.x1]
-        i2 = outputValues[self.x2]
-        if self.op == 0:
-            return i1 + i2
-        elif self.op == 1:
-            return i1 - i2
-        elif self.op == 2:
-            return i1 * i2
-        elif self.op == 3:
-            if i2 == 0:
-                return 0
-            return i1 / i2
-        
-    def __repr__(self):
-        return f"{self.x1, self.x2, self.op}"
-
-
 
 class Individual:
-    x_size = 0
-    y_size = 0
     num_inputs = 0
     num_outputs = 0
-    gates = []
-    lookback = 0
-    outputElem = 0
+    chromozome = [] # first column, then second column, etc.
+    outputValues = [] # inputs + gene outputs
 
-
-    def __init__(self, x_size, y_size):
-        self.x_size = x_size
-        self.y_size = y_size
+    def __init__(self, outputValues):
+        self.outputValues = outputValues
         # random genes initialization
-        self.gates = [[Gate(0, 0, 0) for _ in range(y_size)] for _ in range(x_size)]
-        for i in range(len(self.gates)):
-            for j in range(len(self.gates[i])):
-                col_len = len(self.gates[0])
-                op = random.randint(0, 3)
-                i1 = random.randint(0, (input_size-1) + col_len*i) # input_size - 1 for indexing
-                i2 = random.randint(0, (input_size-1) + col_len*i) # each column can have inputs from previous columns
-                self.gates[i][j] = Gate(i1, i2, op)
-        self.outputElem = random.randint((input_size),(input_size) + (x_size-1) * y_size) # output can be any of the elements except inputs
+        self.chromozome = [0 for _ in range((x_size * y_size) * 3 + 1)] # triple for each gate + output element
+        for i in range(x_size):  # col idx
+            for j in range(y_size):  # row idx
 
-    def fitness(self):
-        pass
+                if i - lookback < 0:
+                    #print(0, input_size + y_size * i - 1)
+                    i1 = random.randint(0, input_size + y_size * i - 1)  # input_size - 1 for indexing
+                    i2 = random.randint(0, input_size + y_size * i - 1)
+
+                elif i - lookback == 0:  # lookback, cannot see input column
+                    #print(input_size, input_size + y_size * i - 1)
+                    i1 = random.randint(input_size, input_size + y_size * i - 1)  # input_size - 1 for indexing
+                    i2 = random.randint(input_size, input_size + y_size * i - 1)
+
+                else:
+                    #print(input_size + y_size * (i - lookback), input_size + y_size * i - 1)
+                    i1 = random.randint(input_size + y_size * (i - lookback), input_size + y_size * i - 1)  # input_size - 1 for indexing
+                    i2 = random.randint(input_size + y_size * (i - lookback), input_size + y_size * i - 1)
+
+                op = random.randint(0, 3)  # 0: add, 1: sub, 2: mul, 3: div
+                gate_index = (i * y_size + j) * 3
+                self.chromozome[gate_index] = i1
+                self.chromozome[gate_index + 1] = i2
+                self.chromozome[gate_index + 2] = op
+
+        self.chromozome[-1] = random.randint(input_size + (x_size - lookback) * y_size, len(self.outputValues) - 2) # output can be any of the elements except itself and inputs, -2 for indexing
+
 
     def execute(self):
-        for i in range(self.x_size):
-            for j in range(self.y_size):
-                outputValues[(input_size) + (i * self.y_size) + j] = self.gates[i][j].execute()
+        for i in range(x_size):
+            for j in range(y_size):
+                gate = (self.chromozome[(i * y_size + j) * 3], self.chromozome[(i * y_size + j) * 3 + 1], self.chromozome[(i * y_size + j) * 3 + 2])
 
-        return outputValues[self.outputElem]
+                if gate[2] == 0: # addition
+                    outputValues[(i * y_size + j) + input_size] = outputValues[gate[0]] + outputValues[gate[1]]
 
+                elif gate[2] == 1: # subtraction
+                    outputValues[(i * y_size + j) + input_size] = outputValues[gate[0]] - outputValues[gate[1]]
+
+                elif gate[2] == 2: # multiplication
+                    outputValues[(i * y_size + j) + input_size] = outputValues[gate[0]] * outputValues[gate[1]]
+
+                elif gate[2] == 3: # division by zero
+                    if outputValues[gate[1]] == 0:
+                        outputValues[(i * y_size + j) + input_size] = 0
+                    else:
+                        outputValues[(i * y_size + j) + input_size] = outputValues[gate[0]] / outputValues[gate[1]]
+            
+        outputValues[-1] = outputValues[self.chromozome[-1]]
+
+
+    
     def mutate(self):
-        num_mutations = random.randint(1, MUTATION_MAX)
+        num_mutations = random.randint(0, MUTATION_MAX)
+        num_mutations = 10
         for _ in range(num_mutations):
-            rand = random.randint(0, x_size * y_size * 3) # choose a random gene or output element
-            if rand < x_size * y_size * 3:
-                col_len = len(self.gates[0])
-                i = rand // (3 * col_len)
-                j = rand // 3
-                if j >= col_len:
-                    j -= col_len
-                
-                if rand % 3 == 0:
-                    self.gates[i][j].x1 = random.randint(0, (input_size-1) + col_len*i)
-                elif rand % 3 == 1:
-                    self.gates[i][j].x2 = random.randint(0, (input_size-1) + col_len*i)
+            idx = random.randint(0, (x_size * y_size) * 3) # gates + output index
+
+            if idx == (x_size * y_size) * 3 : # output, last element
+                self.chromozome[idx] = random.randint(input_size + (x_size - lookback) * y_size, len(self.outputValues) - 2) 
+                continue
+
+            if idx % 3 == 2:    # operator
+                self.chromozome[idx] = random.randint(0, 3)
+            else:   # input
+                col_idx = idx // (3 * y_size)
+                #print(col_idx)
+                if col_idx - lookback < 0:
+                    #print(0, input_size + y_size * (col_idx) - 1)
+                    self.chromozome[idx] = random.randint(0, input_size + y_size * (col_idx) - 1)
+                elif col_idx - lookback == 0: # lookback, cannot see input column
+                    #print(input_size, input_size + y_size * (col_idx) - 1)
+                    self.chromozome[idx] = random.randint(input_size, input_size + y_size * (col_idx) - 1)
                 else:
-                    self.gates[i][j].op = random.randint(0, 3)
-            else:
-                self.outputElem = random.randint((input_size),(input_size) + (x_size-1) * y_size)
+                    #print(input_size + y_size * ((col_idx - 1) - lookback), input_size + y_size * (col_idx) - 1)
+                    self.chromozome[idx] = random.randint(input_size + y_size * ((col_idx) - lookback), input_size + y_size * (col_idx) - 1)
 
 
-
-
-
+    def print_chromozome(self):
+        for i in range(x_size):
+            for j in range(y_size):
+                print(f"{self.chromozome[(i * y_size + j) * 3]}, {self.chromozome[(i * y_size + j) * 3 + 1]}, {self.chromozome[(i * y_size + j) * 3 + 2]}")
+        print(self.chromozome[-1])
 
 
 
 if __name__ == "__main__":
-    inputs = [1, 2, 3, 4]
+    inputs = [0, 1, 2, 3]
     input_size = len(inputs)
 
-    outputValues = inputs + ([0 for _ in range(x_size * y_size)]) # inputs + gene outputs
+    outputValues = inputs + [0 for i in range(x_size * y_size + 1)] # inputs + gene outputs + output
     print(outputValues)
 
-    ind = Individual(x_size, y_size) # each list is a column
-    print(ind.execute())
-    print(ind.gates, ind.outputElem)
+    ind = Individual(outputValues) # each list is a column
+    ind.print_chromozome()
+    print("-----")
     ind.mutate()
-    print(ind.execute())
-    print(ind.gates, ind.outputElem)
+    ind.print_chromozome()
 
 
 
