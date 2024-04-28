@@ -4,6 +4,7 @@ import src.dataParser as d
 import os
 import src.MLP as m
 import src.SVM as s
+import src.CGP as c
 import sys
 
 
@@ -35,13 +36,16 @@ if __name__ == "__main__":
         parser.save_data("data/processed_data/")
         print("Data processed and saved")
 
-    elif "--cross_validation" in sys.argv:
+    elif "--svm" in sys.argv:
         data = parser.load_data("data/processed_data/") #181 files
         data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
         s.cross_validation(data)
 
     elif "--cgp":
-        pass
+        data = parser.load_data("data/processed_data/") #181 files
+        data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
+        c.cross_validation(data, num_generations=100, pop_size=10)
+        
 
     # sshfs xplick04@merlin.fit.vutbr.cz:/homes/eva/xp/xplick04/BIN tmp/
     # fusermount -u tmp/
