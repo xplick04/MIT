@@ -127,11 +127,11 @@ class Population:
     best_individual = None
 
     def __init__(self, pop_size, features, labels):
+        self.population = []
         self.features = features
         self.labels = labels
         outputValues = np.zeros((features.shape[0], x_size * y_size + 1)) # create output values for each individual
         outputValues = np.concatenate((features, outputValues), axis=1)
-
         # create L + 1 random individuals
         for _ in range(pop_size + 1):
             self.population.append(Individual(outputValues))
@@ -147,8 +147,6 @@ class Population:
     
     def train(self, num_generations):
         for g in tqdm(range(num_generations), desc="Training"):
-            """if g == num_generations // 2:
-                MUTATION_MAX //= 2""" # should i divide like in simulating annealing?
 
             fitness = self.evaluate()
 
@@ -163,7 +161,7 @@ class Population:
             for individual in self.population[1:]:
                 individual.mutate()
 
-            print(f"Generation {g}, Best fitness: {best_fitness:.2f}")
+            #print(f"Generation {g}, Best fitness: {best_fitness:.2f}")
         self.best_individual = self.population[0]
 
         
@@ -174,7 +172,7 @@ class Population:
         test_individual.chromozome = self.best_individual.chromozome
         test_result = test_individual.execute()
         test_accuracy = (test_labels == test_result).sum() / len(test_labels)
-        print(f"Test accuracy: {test_accuracy*100:.2f}%")
+        print(f"Validation accuracy: {test_accuracy*100:.2f}%")
 
 
 def get_data(data, idx):
@@ -191,7 +189,6 @@ def get_data(data, idx):
 
 def cross_validation(data, num_generations=10, pop_size=2):
     global input_size
-    input_size = data[0].shape[1] - 1
 
     kf = KFold(n_splits=10, shuffle=True)
     # K fold cross validation
@@ -201,11 +198,11 @@ def cross_validation(data, num_generations=10, pop_size=2):
         test_data = get_data(data, test_index)
         train_features, train_labels = train_data[:, :-1], train_data[:, -1]
         test_features, test_labels = test_data[:, :-1], test_data[:, -1]
+        input_size = train_features.shape[1]
 
         pop = Population(pop_size, train_features, train_labels)
         pop.train(num_generations)
         pop.test(test_features, test_labels)
-        break
 
 
 
