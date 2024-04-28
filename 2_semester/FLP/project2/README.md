@@ -1,22 +1,24 @@
 ### Maxim Plička (xplick04)
-### Akademický rok 2023/24
-### Minimální kostra grafu
+### Academic Year 2023/24
+### Minimum Spanning Tree
 
+# Method Description
+The project deals with finding the minimum spanning tree of a graph.
 
-# Popis použité metody
-Projekt se zabývá nelezením minimální kostry grafu.
+After input is read, edges are stored in a database using a dynamic predicate representing an edge. These edges are stored in both directions since the input is an undirected graph.
 
-Po načtení vstupu jsou hrany uloženy do databáze pomocí dynamického predeikátu reprezentujícího hranu. Tyto hrany jsou uloženy v obou směrech, jelikož je na vstupu neorientovaný graf.
+The main traversal and finding of all paths involve selecting the first node from the database (if the graph is connected, it doesn't matter which node to start from). From this node, the traversal progresses by recursively diving into previously defined edges. During traversal, explored nodes are gradually added to the `Visited` list, preventing cycling. Traversal not only makes depth-first steps but also breadth-first, ensuring that the output contains all possible spanning trees. After exploring each neighbor, the traversal starts to backtrack, and edges are gradually added to the `Solution` list in alphabetical order. I chose this method of backtracking to avoid distinguishing between connected and disconnected graphs. The entire traversal is initiated using `setof`, obtaining all possible non-duplicate paths.
 
-Hlavní průchod a nalezení všech cest spočívá v tom, že se vybere první uzel z databáze (pokud je graf souvislý nezáleží, z kterého uzlu se začíná). Z tohoto uzlu se poté postupně zanořuje pomocí dříve definovaných hran. Během zanořovánní se do listu `visited` postupně příkládají prozkoumané uzly, díky čemu se prohledávání nezacyklí. Prohledávání nedělá pouze kroky do hloubky ale i do šířky, díky čemu bude výstup obsahovat všechny možné kostry. Po každém prozkoumaném sousedovi se začne vynořovat a postupně se do seznamu `Solution` přidávají hrany v abecedním pořadí. Prohledávání je spouštěno pomocí `setof`, díky čemu je možné získat všechny možné cesty. 
+Paths are then filtered (keeping only paths containing all graph nodes) and printed in the desired format.
 
-Cesty jsou na závěr profiltrovány (zanechají se pouze cesty, které obsahují všechny uzly grafu) a poté jsou vypsány na výstup v požadovaném formátu.
+Regarding computation time, the algorithm can compute smaller tasks (provided test files) in a few milliseconds.
 
+# Usage Guide
+The project is compiled using the `make` command.
 
-# Návod k použití
-Projekt se překládá pomocí příkazu `make`.
+After compilation, the project can be run using `./flp23-log < TESTFILE`, where `TESTFILE` is a path to file containing input to the program.
 
-Po přeložení je projekt možné spustit pomocí `./flp23-proj < TESTFILE` , kde `TESTFILE` je soubor obsahující vstup do programu.
+Provided tests are located in the tests directory.
 
-# Omezení
-Není prováděna žádná kontrola vstupu, ovšem ignorují se prázdné řádky.
+# Limitations
+No input validation is performed, although empty lines are ignored.

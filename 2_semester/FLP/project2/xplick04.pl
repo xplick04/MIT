@@ -4,6 +4,9 @@
 * Date: 2024-04-25
 */
 
+% ------------------------------------------------------------------------------
+% Reading the input
+
 read_line(L,C) :-
 	get_char(C),
 	(
@@ -26,6 +29,7 @@ read_lines(Ls) :-
 	).
 
 % ------------------------------------------------------------------------------
+% Database and helper functions
 
 :- dynamic(edge/2). % Dynamic predicate for storing the edges
 
@@ -46,7 +50,7 @@ get_first_vertex(FirstVertex) :-
     edge(FirstVertex, _),!. % Get the first vertex in database
 
 
-get_unique_vertices(UniqueVertices) :-
+get_unique_vertices(UniqueVertices) :- % Get all unique vertices from the database
 	findall(V, edge(V, _), Vertices),
 	findall(V2, edge(_, V2), Vertices2),
 	append(Vertices, Vertices2, VerticesAll),
@@ -63,69 +67,71 @@ convert_to_list([(V1, V2)], [V1, V2]).
 convert_to_list([(V1, V2)|T], [V1, V2|T2]) :- convert_to_list(T, T2).
 
 % ------------------------------------------------------------------------------
+% Solving the problem
 
-
-solve(AllPaths) :-
+solve(AllSolutions) :-
 	get_first_vertex(FirstVertex), % Get the first vertex
-	setof(Path, search(FirstVertex, [FirstVertex], Path), AllPaths).
+	setof(Solution, search(FirstVertex, [FirstVertex], Solution), AllSolutions). % Find all paths
 
 
 search(_, _, []).
-search(Current, Visited, Solution2) :- % Maintain the order of the edges
+search(Current, Visited, SolutionOut) :- % Maintain the order of the edges
     edge(Current, Next),
-	Current @< Next, % Alphabetical order
-    not(member(Next, Visited)),
+	not(member(Next, Visited)),
 	(
-		search(Current, [Next | Visited], Solution); % Recursively call for the next vertex
-		search(Next, [Next | Visited], Solution)	% Recursively call for the next vertex
+		search(Current, [Next | Visited], Solution); % Recursively call for the next vertex (BFS)
+		search(Next, [Next | Visited], Solution)	% Recursively call for the next vertex (DFS)
 	),
-	sort([(Current, Next) | Solution], Solution2).
+	(
+		Current @< Next -> % Store in alhabetic order
+		sort([(Current, Next) | Solution], SolutionOut) % Append in the correct order (A,B) < (A,C)
+		;
+		sort([(Next, Current) | Solution], SolutionOut)
+	).
 
-search(Current, Visited, Solution2) :-	% Maintain the order of the edges
-    edge(Next, Current),
-	Current @> Next, % Alphabetical order
-    not(member(Next, Visited)),
-	(
-		search(Current, [Next | Visited],Solution);
-		search(Next, [Next | Visited], Solution)
-	),
-	sort([(Next, Current) | Solution], Solution2).
 
 % ------------------------------------------------------------------------------
+% Printing the solution
+
+print_spanning_tree([]).
+print_spanning_tree([(V1, V2)]):- format('~w-~w', [V1, V2]). % Print last edge of solution
+print_spanning_tree([(V1, V2)|T]) :-
+	format('~w-~w ', [V1, V2]),
+	print_spanning_tree(T).
 
 
 print_solution([]).
-print_solution([(V1, V2)]):- format('~w-~w\n', [V1, V2]). % Print last edge of solution
-print_solution([(V1, V2)|T]) :-
-	format('~w-~w ', [V1, V2]),
-	print_solution(T).
+print_solution([Tree|Trees]) :-
+    print_spanning_tree(Tree),
+	nl,
+    print_solution(Trees). % Recursively call for the next tree
 
-
-print_spanning_trees([]).
-print_spanning_trees([Tree|Trees]) :-
+filter_solution([], []).
+filter_solution([Tree|Trees], [Tree|FilteredTrees]) :-
 	get_unique_vertices(VerticesGraph), % Get all vertices from input graph
 	length(VerticesGraph, LengthGraph),	% Get the number of vertices
 	convert_to_list(Tree, VerticesSol), % Converts edge tuples to one list
 	sort(VerticesSol, VerticesSolution), % Remove duplicates
-    length(VerticesSolution, LengthSolution),
-    LengthSolution is LengthGraph,
-    print_solution(Tree),
-    print_spanning_trees(Trees). % Recursively call for the next tree
-print_spanning_trees([_|Trees]) :- % Skip tree that do not contain all vertices
-    print_spanning_trees(Trees).
+	length(VerticesSolution, LengthSolution),
+	LengthSolution is LengthGraph,	% Check if the solution contains all vertices
+	filter_solution(Trees, FilteredTrees).
+filter_solution([_|Trees], FilteredTrees) :- % Skip tree that do not contain all vertices
+	filter_solution(Trees, FilteredTrees).
+
 
 % ------------------------------------------------------------------------------
-
+% Main function
 
 start :-
     prompt(_, ''),
     read_lines(LL),
+	filter_empty(LL, Edges), % filter out empty rows
     (   
-		LL = [] ->  % If the input is empty, halt
+		Edges = [] ->  % If the input is empty, halt
         halt
     	;   
-		filter_empty(LL, Edges), % filter out empty rows
         write_edges_to_db(Edges), % Write the edges to the database
-        solve(P), % Solve the problem
-        print_spanning_trees(P) % Filter out the paths not containing all vertices
+        solve(Solution), % Solve the problem
+		filter_solution(Solution, FilteredSolution), % Filter out the paths not containing all vertices
+        print_solution(FilteredSolution) % Filter out the paths not containing all vertices
     ).
