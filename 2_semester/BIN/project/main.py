@@ -41,14 +41,11 @@ if __name__ == "__main__":
         data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
         s.cross_validation(data)
 
-    elif "--cgp":
+    elif "--cgp" in sys.argv:
         data = parser.load_data("data/processed_data/") #181 files
         data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
-        c.cross_validation(data, num_generations=10, pop_size=2)
+        c.cross_validation(data, num_generations=100, pop_size=10, MUTATION_MAX=10, lookback=2, x_size=10, y_size=10)
         
-
-    # sshfs xplick04@merlin.fit.vutbr.cz:/homes/eva/xp/xplick04/BIN tmp/
-    # fusermount -u tmp/
 
 
             

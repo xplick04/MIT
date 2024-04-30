@@ -1,0 +1,1 @@
+{"best_fitness": 16.24807680927192, "_timestamp": 1714416309.4765074, "_runtime": 2.9469823837280273, "_step": 20, "test_accuracy": 0.781021897810219, "average_test_accuracy": 0.5916519581500351, "_wandb": {"runtime": 1}}

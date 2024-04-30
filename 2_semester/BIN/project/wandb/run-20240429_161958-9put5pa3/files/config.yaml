@@ -1,0 +1,51 @@
+wandb_version: 1
+
+num_generations:
+  desc: null
+  value: 10
+pop_size:
+  desc: null
+  value: 2
+MUTATION_MAX:
+  desc: null
+  value: 10
+lookback:
+  desc: null
+  value: 2
+x_size:
+  desc: null
+  value: 5
+y_size:
+  desc: null
+  value: 5
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.9
+    cli_version: 0.16.6
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1714400398.0
+    t:
+      1:
+      - 1
+      - 5
+      - 53
+      - 55
+      2:
+      - 1
+      - 5
+      - 53
+      - 55
+      3:
+      - 2
+      - 13
+      - 16
+      - 23
+      4: 3.11.9
+      5: 0.16.6
+      8:
+      - 3
+      - 5
+      13: windows-amd64

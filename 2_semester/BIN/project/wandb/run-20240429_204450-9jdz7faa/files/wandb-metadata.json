@@ -1,0 +1,55 @@
+{
+    "os": "Windows-10-10.0.22631-SP0",
+    "python": "3.11.9",
+    "heartbeatAt": "2024-04-29T18:44:51.332982",
+    "startedAt": "2024-04-29T18:44:50.343402",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--cgp"
+    ],
+    "state": "running",
+    "program": "C:\\Users\\maxig\\Desktop\\MIT\\MIT\\2_semester\\BIN\\project\\main.py",
+    "codePathLocal": "main.py",
+    "codePath": "2_semester\\BIN\\project\\main.py",
+    "git": {
+        "remote": "https://github.com/xplick04/MIT.git",
+        "commit": "0e163cf187bec2e3ddda31d7b531de26724e0d7c"
+    },
+    "email": "maxim.plicka@icloud.com",
+    "root": "C:/Users/maxig/Desktop/MIT/MIT",
+    "host": "MAX-PC",
+    "username": "maxig",
+    "executable": "C:\\Users\\maxig\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\python.exe",
+    "cpu_count": 14,
+    "cpu_count_logical": 20,
+    "cpu_freq": {
+        "current": 3500.0,
+        "min": 0.0,
+        "max": 3500.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3500.0,
+            "min": 0.0,
+            "max": 3500.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 1862.2421836853027,
+            "used": 263.6695251464844
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 4070",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 4070",
+            "memory_total": 12878610432
+        }
+    ],
+    "memory": {
+        "total": 31.84471893310547
+    }
+}

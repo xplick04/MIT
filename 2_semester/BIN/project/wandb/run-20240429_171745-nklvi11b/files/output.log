@@ -1,0 +1,51 @@
+
+---Fold 1---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Training:  99%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████  | 99/100 [01:07<00:00,  1.48it/s]
+Test accuracy: 54.74%
+Training: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [01:08<00:00,  1.46it/s]
+Training:   0%|                                                                                                                                                                                                        | 0/100 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\main.py", line 46, in <module>
+    c.cross_validation(data, num_generations=100, pop_size=10, MUTATION_MAX=10, lookback=2, x_size=10, y_size=10)
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\src\CGP.py", line 216, in cross_validation
+    pop.train()
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\src\CGP.py", line 148, in train
+    fitness = self.evaluate()
+              ^^^^^^^^^^^^^^^
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\src\CGP.py", line 139, in evaluate
+    error = np.linalg.norm(result - self.labels)  # Compute the error between result vector and labels
+                           ~~~~~~~^~~~~~~~~~~~~
+ValueError: operands could not be broadcast together with shapes (1192,) (1196,)

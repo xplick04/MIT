@@ -1,0 +1,100 @@
+
+---Fold 1---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Training:  97%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎     | 97/100 [01:05<00:02,  1.48it/s]
+Test accuracy: 53.33%
+Training: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [01:07<00:00,  1.48it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Training:  97%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎     | 97/100 [01:10<00:02,  1.40it/s]
+Test accuracy: 79.56%
+Training: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [01:12<00:00,  1.39it/s]
+
+
+
+
+
+
+
+
+
+Training:  26%|█████████████████████████████████████████████████▋                                                                                                                                             | 26/100 [00:18<00:52,  1.41it/s]
+Traceback (most recent call last):
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\main.py", line 46, in <module>
+    c.cross_validation(data, num_generations=100, pop_size=10, MUTATION_MAX=10, lookback=2, x_size=10, y_size=10)
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\src\CGP.py", line 217, in cross_validation
+    pop.train()
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\src\CGP.py", line 149, in train
+    fitness = self.evaluate()
+              ^^^^^^^^^^^^^^^
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\src\CGP.py", line 139, in evaluate
+    result = individual.execute()  # Assuming execute returns a vector of results (one training dato result per row)
+             ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maxig\Desktop\MIT\MIT\2_semester\BIN\project\src\CGP.py", line 54, in execute
+    self.outputValues[k][(i * config['y_size'] + j) + input_size] = self.outputValues[k][gate[0]] + self.outputValues[k][gate[1]]
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
