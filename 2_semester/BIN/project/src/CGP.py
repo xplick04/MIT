@@ -6,6 +6,9 @@ from tqdm import tqdm
 import wandb
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
+import scikitplot as skplt
+import networkx as nx
+
 
 STATISTICS = False
 
@@ -64,17 +67,25 @@ class Individual:
 
                 elif gate[2] == 3: # division 
                     # Define a small constant
-                    small_constant = 0.001
+                    small_constant = 0.0001
                     # Find the indexes where the value is 0
                     zero_indexes = np.where(self.outputValues[:, gate[1]] == 0)
                     # Replace the values at those indexes with the small constant
                     self.outputValues[zero_indexes, gate[1]] = small_constant
                     self.outputValues[:, (i * config['y_size'] + j) + input_size] = self.outputValues[:, gate[0]] / self.outputValues[:, gate[1]]
 
-        
         # Apply sigmoid activation function to the output
-        self.outputValues[:, -1] = 1 / (1 + np.exp(-self.outputValues[:, self.chromozome[-1]]))
+        self.outputValues[:, -1] = self.sigmoid()
         return self.outputValues[:, -1]  # return vector of outputs
+    
+
+    def sigmoid(self):
+        larger_numbers = np.where(self.outputValues[:, self.chromozome[-1]] > 50)
+        self.outputValues[larger_numbers, self.chromozome[-1]] = 50
+        smaller_numbers = np.where(self.outputValues[:, self.chromozome[-1]] < -50)
+        self.outputValues[smaller_numbers, self.chromozome[-1]] = -50
+        return 1 / (1 + np.exp(-self.outputValues[:, self.chromozome[-1]]))
+
 
     def mutate(self):
         num_mutations = random.randint(0, config['mut_max'])
@@ -110,7 +121,6 @@ class Individual:
             for j in range(config['y_size']):
                 print(f"({self.chromozome[(i * config['y_size'] + j) * 3]},{self.chromozome[(i * config['y_size'] + j) * 3 + 1]},{self.chromozome[(i * config['y_size'] + j) * 3 + 2]})", end='')
         print(self.chromozome[-1])
-
 
 
 class Population:
@@ -180,27 +190,24 @@ class Population:
         test_individual = Individual(test_outputValues)
         test_individual.chromozome = self.best_individual.chromozome
         test_result = test_individual.execute()
-        test_result = np.where(test_result > 0.5, 1, 0) # thresholding
+        #ROC_curve(test_labels, test_result)
+        test_result = np.where(test_result >= 0.5, 1, 0) # thresholding
         test_accuracy = (test_labels == test_result).sum() / len(test_labels)
 
-        #ROC_curve(test_labels, test_result)
         return test_accuracy
 
 
 def ROC_curve(test_labels, test_result):
+    # Compute ROC curve
     fpr, tpr, thresholds = roc_curve(test_labels, test_result)
-    roc_auc = auc(fpr, tpr)
 
-    plt.figure()
-    lw = 2
-    plt.plot(fpr, tpr, color='darkorange', lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
-    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
+    # Plot ROC curve
+    plt.plot(fpr, tpr, color='blue', label='ROC Curve')
+    plt.plot([0, 1], [0, 1], color='red', linestyle='--', label='Random Guessing')
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic (ROC) Curve')
-    plt.legend(loc="lower right")
+    plt.legend()
     plt.show()
 
 
@@ -250,13 +257,13 @@ def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_
 
         test_accs.append(test_acc)
         if STATISTICS:
-            wandb.log({"test_accuracy": test_acc})
+            wandb.log({"test_accuracy": test_acc*100})
         else:
             print(f"Test accuracy: {test_acc*100:.2f}%")
 
 
     if STATISTICS:
-        wandb.log({"average_test_accuracy": sum(test_accs) / len(test_accs)})
+        wandb.log({"average_test_accuracy": sum(test_accs) / len(test_accs) * 100})
         wandb.finish()
     else:
         print(f"Average test accuracy: {sum(test_accs) / len(test_accs) * 100:.2f}%")

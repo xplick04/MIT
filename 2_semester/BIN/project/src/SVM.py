@@ -23,7 +23,7 @@ class SVM:
 
 
 def cross_validation(data):
-    kf = KFold(n_splits=10, shuffle=True)
+    kf = KFold(n_splits=5, shuffle=True)
     accuracies = []
 
     for foldID, (train_index, test_index) in enumerate(kf.split(data)):
