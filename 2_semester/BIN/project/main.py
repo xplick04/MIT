@@ -36,6 +36,11 @@ if __name__ == "__main__":
         parser.save_data("data/processed_data/")
         print("Data processed and saved")
 
+    elif "--mlp" in sys.argv:
+        data = parser.load_data("data/processed_data/") #181 files
+        data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
+        m.cross_validation(data)
+
     elif "--svm" in sys.argv:
         data = parser.load_data("data/processed_data/") #181 files
         data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
@@ -44,7 +49,7 @@ if __name__ == "__main__":
     elif "--cgp" in sys.argv:
         data = parser.load_data("data/processed_data/") #181 files
         data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
-        c.cross_validation(data, num_generations=10, pop_size=10, MUTATION_MAX=10, lookback=2, x_size=5, y_size=5)
+        c.cross_validation(data, num_generations=100, pop_size=500, MUTATION_MAX=20, lookback=2, x_size=5, y_size=5)
         
 
 

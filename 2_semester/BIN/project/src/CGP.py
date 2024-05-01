@@ -12,7 +12,6 @@ import networkx as nx
 
 STATISTICS = False
 
-
 class Individual:
     num_inputs = 0
     num_outputs = 0
@@ -159,9 +158,9 @@ class Population:
         return fitness
 
     def train(self):
-        for g in tqdm(range(config['num_generations']), desc="Training"):
+        for g in range(config['num_generations']):
 
-            fitness = self.evaluate()
+            fitness = self.evaluate2()
 
             # get best individual
             best_fitness, best_individual_idx = min(fitness), fitness.index(min(fitness))
@@ -190,7 +189,9 @@ class Population:
         test_individual = Individual(test_outputValues)
         test_individual.chromozome = self.best_individual.chromozome
         test_result = test_individual.execute()
-        #ROC_curve(test_labels, test_result)
+        
+        ROC_curve(test_labels, test_result)
+        exit(1)
         test_result = np.where(test_result >= 0.5, 1, 0) # thresholding
         test_accuracy = (test_labels == test_result).sum() / len(test_labels)
 
@@ -206,7 +207,7 @@ def ROC_curve(test_labels, test_result):
     plt.plot([0, 1], [0, 1], color='red', linestyle='--', label='Random Guessing')
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.title('CGP - ROC curve')
     plt.legend()
     plt.show()
 
@@ -240,11 +241,18 @@ def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_
     if STATISTICS:
         run_name = f"CGP_gens{config['num_generations']}_popSize{config['pop_size']}_MUT{config['mut_max']}_lookback{config['lookback']}_dims({config['x_size']},{config['y_size']})"
         wandb.init(project='BIN-CGP', entity='maxim-pl', name=run_name, config=config)
+
+
     test_accs = []
-    kf = KFold(n_splits=5, shuffle=True)
-    # K fold cross validation
-    for foldID, (train_index, test_index) in enumerate(kf.split(data)):
-        print(f"---Fold {foldID + 1}---")
+
+    # cross validation, 200 runs on random splits(8:2) to aproximate the average test accuracy, 200 runs seemed to be a good sample size since after 200 runs the average test acc repeated
+    best_individual = None
+
+    number_of_runs = 200
+    for n in tqdm(range(number_of_runs), desc="Cross validation runs"):
+        train_index = np.random.randint(0, len(data), int(0.8 * len(data)))
+        test_index = np.setdiff1d(np.arange(len(data)), train_index)
+
         train_data = get_data(data, train_index)
         test_data = get_data(data, test_index)
         train_features, train_labels = train_data[:, :-1], train_data[:, -1]
@@ -254,8 +262,9 @@ def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_
         pop = Population(config['pop_size'], train_features, train_labels)
         pop.train()
         test_acc = pop.test(test_features, test_labels)
-
         test_accs.append(test_acc)
+
+
         if STATISTICS:
             wandb.log({"test_accuracy": test_acc*100})
         else:
@@ -267,30 +276,3 @@ def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_
         wandb.finish()
     else:
         print(f"Average test accuracy: {sum(test_accs) / len(test_accs) * 100:.2f}%")
-
-"""
-def testos():
-    data = [[1,2,3,4,5], [5,4,3,2,1]]
-    data = np.array(data)
-    label = [1, 1]
-    label = np.array(label)
-
-    global input_size
-    input_size = data.shape[1]
-    global config
-    config = {
-        "num_generations": 1,
-        "pop_size": 2,
-        "mut_max": 2,
-        "lookback": 2,
-        "x_size": 2,
-        "y_size": 2
-    }
-
-    p = Population(2, data, label)
-    p.train()
-
-
-
-if __name__ == "__main__":
-    testos()"""
