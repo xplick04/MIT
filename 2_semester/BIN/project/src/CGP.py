@@ -148,19 +148,11 @@ class Population:
             fitness.append(error)
         return fitness
     
-    def evaluate2(self):
-        fitness = []
-        for individual in self.population:
-            result = individual.execute()  # Assuming execute returns a vector of results (one training data result per row)
-            squared_diff = np.square(result - self.labels)  # Compute the squared differences
-            mse = np.mean(squared_diff)  # Calculate the mean squared error
-            fitness.append(mse)
-        return fitness
 
     def train(self):
         for g in range(config['num_generations']):
 
-            fitness = self.evaluate2()
+            fitness = self.evaluate()
 
             # get best individual
             best_fitness, best_individual_idx = min(fitness), fitness.index(min(fitness))
@@ -181,6 +173,7 @@ class Population:
             
 
         self.best_individual = self.population[0]
+        return self.best_individual
 
 
     def test(self, test_features, test_labels):
@@ -189,27 +182,13 @@ class Population:
         test_individual = Individual(test_outputValues)
         test_individual.chromozome = self.best_individual.chromozome
         test_result = test_individual.execute()
-        
-        ROC_curve(test_labels, test_result)
-        exit(1)
         test_result = np.where(test_result >= 0.5, 1, 0) # thresholding
         test_accuracy = (test_labels == test_result).sum() / len(test_labels)
+        test_sensitivity = (test_labels[test_labels == 1] == test_result[test_labels == 1]).sum() / len(test_labels[test_labels == 1])
+        test_specificity = (test_labels[test_labels == 0] == test_result[test_labels == 0]).sum() / len(test_labels[test_labels == 0])
 
-        return test_accuracy
+        return test_accuracy, test_sensitivity, test_specificity
 
-
-def ROC_curve(test_labels, test_result):
-    # Compute ROC curve
-    fpr, tpr, thresholds = roc_curve(test_labels, test_result)
-
-    # Plot ROC curve
-    plt.plot(fpr, tpr, color='blue', label='ROC Curve')
-    plt.plot([0, 1], [0, 1], color='red', linestyle='--', label='Random Guessing')
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('CGP - ROC curve')
-    plt.legend()
-    plt.show()
 
 
 
@@ -225,8 +204,6 @@ def get_data(data, idx):
 
 
 def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_size, y_size):
-
-
     global config
     config = {
         "num_generations": num_generations,
@@ -242,13 +219,14 @@ def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_
         run_name = f"CGP_gens{config['num_generations']}_popSize{config['pop_size']}_MUT{config['mut_max']}_lookback{config['lookback']}_dims({config['x_size']},{config['y_size']})"
         wandb.init(project='BIN-CGP', entity='maxim-pl', name=run_name, config=config)
 
-
-    test_accs = []
-
-    # cross validation, 200 runs on random splits(8:2) to aproximate the average test accuracy, 200 runs seemed to be a good sample size since after 200 runs the average test acc repeated
     best_individual = None
+    best_test_acc = 0
+    test_accs = []
+    test_sensis = []
+    test_specis = []
+    # cross validation, 200 runs on random splits(8:2) to aproximate the average test accuracy, 200 runs seemed to be a good sample size since after 200 runs the average test acc repeated
 
-    number_of_runs = 200
+    number_of_runs = 10
     for n in tqdm(range(number_of_runs), desc="Cross validation runs"):
         train_index = np.random.randint(0, len(data), int(0.8 * len(data)))
         test_index = np.setdiff1d(np.arange(len(data)), train_index)
@@ -260,10 +238,15 @@ def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_
         input_size = train_features.shape[1]
 
         pop = Population(config['pop_size'], train_features, train_labels)
-        pop.train()
-        test_acc = pop.test(test_features, test_labels)
+        ind = pop.train()
+        test_acc, test_sensi, test_speci = pop.test(test_features, test_labels)
         test_accs.append(test_acc)
+        test_sensis.append(test_sensi)
+        test_specis.append(test_speci)
 
+        if test_acc > best_test_acc:
+            best_test_acc = test_acc
+            best_individual = ind
 
         if STATISTICS:
             wandb.log({"test_accuracy": test_acc*100})
@@ -276,3 +259,7 @@ def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_
         wandb.finish()
     else:
         print(f"Average test accuracy: {sum(test_accs) / len(test_accs) * 100:.2f}%")
+        print("Best individual:")
+        best_individual.print_chromozome()
+
+    return test_accs, test_sensis, test_specis

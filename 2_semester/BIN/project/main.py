@@ -2,11 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import src.dataParser as d
 import os
-import src.MLP as m
-import src.SVM as s
+import src.others as o
 import src.CGP as c
 import sys
-
+import matplotlib.pyplot as plt
 
 def convert(dataset):
     data = []
@@ -27,6 +26,30 @@ def convert(dataset):
     return data
 
 
+def plot_metrics(metrics, metric_name):
+    plt.figure()
+    bp = plt.boxplot(metrics, patch_artist=True, showmeans=True, meanline=True, medianprops=dict(color='black', linewidth=1), widths=0.58)
+
+    # Customize boxplot elements
+    plt.title(f"{metric_name} for Different Models")
+    plt.ylabel(metric_name)
+    plt.xlabel("Models")
+    
+    # Customize x-axis labels and positions
+    model_names = ['SVM', 'Logistic Regression', 'Bayes', 'CGP']
+    plt.xticks(range(1, len(model_names) + 1), model_names)
+
+    # Customize boxplot colors
+    colors = ['lightblue'] * len(model_names)
+    for patch, color in zip(bp['boxes'], colors):
+        patch.set_facecolor(color)
+
+    # Customize mean line
+    plt.setp(bp['means'], color='green', linewidth=1)
+
+    plt.show()
+
+
 
 if __name__ == "__main__":
     parser = d.DataParser()
@@ -36,20 +59,37 @@ if __name__ == "__main__":
         parser.save_data("data/processed_data/")
         print("Data processed and saved")
 
-    elif "--mlp" in sys.argv:
+    elif "--others" in sys.argv:
         data = parser.load_data("data/processed_data/") #181 files
         data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
-        m.cross_validation(data)
-
-    elif "--svm" in sys.argv:
-        data = parser.load_data("data/processed_data/") #181 files
-        data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
-        s.cross_validation(data)
+        o.cross_validation(data)
 
     elif "--cgp" in sys.argv:
         data = parser.load_data("data/processed_data/") #181 files
         data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
-        c.cross_validation(data, num_generations=100, pop_size=500, MUTATION_MAX=20, lookback=2, x_size=5, y_size=5)
+        c.cross_validation(data, num_generations=100, pop_size=500, MUTATION_MAX=20, lookback=1, x_size=7, y_size=7)
+
+    elif "--boxplot" in sys.argv:
+        acc = []
+        sens = []
+        spec = []
+        accOthers = []
+        sensOthers = []
+        specOthers = []
+        data = parser.load_data("data/processed_data/")
+        data = convert(data)
+        acc, sens, spec = c.cross_validation(data, num_generations=100, pop_size=500, MUTATION_MAX=20, lookback=1, x_size=7, y_size=7)
+        accOthers, sensOthers, specOthers = o.cross_validation(data) # SVM, Logistic Regression, Bayes
+        accOthers.append(acc)
+        sensOthers.append(sens)
+        specOthers.append(spec)
+        plot_metrics(accOthers, "Accuracy")
+        plot_metrics(sensOthers, "Sensitivity")
+        plot_metrics(specOthers, "Specificity")
+
+
+
+
         
 
 
