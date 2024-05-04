@@ -1,11 +1,9 @@
-from sklearn import svm, naive_bayes, ensemble, neural_network, linear_model, metrics, model_selection
+from sklearn import svm, naive_bayes
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, accuracy_score
 import numpy as np
 from sklearn.model_selection import KFold
 import torch
-from sklearn.metrics import roc_curve, auc
-import matplotlib.pyplot as plt
 
 class SVM:
     def __init__(self):
