@@ -28,7 +28,7 @@ def convert(dataset):
 
 def plot_metrics(metrics, metric_name):
     plt.figure()
-    bp = plt.boxplot(metrics, patch_artist=True, showmeans=True, meanline=True, medianprops=dict(color='black', linewidth=1), widths=0.58)
+    bp = plt.boxplot(metrics, patch_artist=True, showmeans=True, meanline=True, medianprops=dict(color='black', linewidth=1), widths=0.4)
 
     # Customize boxplot elements
     plt.title(f"{metric_name} for Different Models")
@@ -38,6 +38,11 @@ def plot_metrics(metrics, metric_name):
     # Customize x-axis labels and positions
     model_names = ['SVM', 'Logistic Regression', 'Bayes', 'CGP']
     plt.xticks(range(1, len(model_names) + 1), model_names)
+
+    # Add a line from median to left axis with exact number for each boxplot
+    for i, column_data in enumerate(metrics):
+        median_val = np.median(column_data)
+        plt.text(i + 1.22, median_val, f'{median_val:.2f}', ha='left', va='center', color='black')
 
     # Customize boxplot colors
     colors = ['lightblue'] * len(model_names)
@@ -67,7 +72,7 @@ if __name__ == "__main__":
     elif "--cgp" in sys.argv:
         data = parser.load_data("data/processed_data/") #181 files
         data = convert(data) # List of files, each file is a numpy array of shape (time, channels*bands + label)
-        c.cross_validation(data, num_generations=100, pop_size=500, MUTATION_MAX=20, lookback=1, x_size=7, y_size=7)
+        c.cross_validation(data, num_generations=100, pop_size=50, MUTATION_MAX=20, lookback=2, x_size=5, y_size=5) # default values
 
     elif "--boxplot" in sys.argv:
         acc = []
@@ -78,14 +83,15 @@ if __name__ == "__main__":
         specOthers = []
         data = parser.load_data("data/processed_data/")
         data = convert(data)
-        acc, sens, spec = c.cross_validation(data, num_generations=100, pop_size=500, MUTATION_MAX=20, lookback=1, x_size=7, y_size=7)
+        acc, sens, spec = c.cross_validation(data, num_generations=100, pop_size=500, MUTATION_MAX=20, lookback=1, x_size=7, y_size=7) # best parameters
+        """
         accOthers, sensOthers, specOthers = o.cross_validation(data) # SVM, Logistic Regression, Bayes
         accOthers.append(acc)
         sensOthers.append(sens)
         specOthers.append(spec)
         plot_metrics(accOthers, "Accuracy")
         plot_metrics(sensOthers, "Sensitivity")
-        plot_metrics(specOthers, "Specificity")
+        plot_metrics(specOthers, "Specificity")"""
 
 
 

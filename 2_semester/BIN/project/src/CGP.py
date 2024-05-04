@@ -99,15 +99,11 @@ class Individual:
                 self.chromozome[idx] = random.randint(0, 3)
             else:   # input
                 col_idx = idx // (3 * config['y_size'])
-                #print(col_idx)
                 if col_idx - config['lookback'] < 0:
-                    #print(0, input_size + config['y_size'] * (col_idx) - 1)
                     self.chromozome[idx] = random.randint(0, input_size + config['y_size'] * (col_idx) - 1)
                 elif col_idx - config['lookback'] == 0: # lookback, cannot see input column
-                    #print(input_size, input_size + config['y_size'] * (col_idx) - 1)
                     self.chromozome[idx] = random.randint(input_size, input_size + config['y_size'] * (col_idx) - 1)
                 else:
-                    #print(input_size + config['y_size'] * ((col_idx - 1) - config['lookback']), input_size + config['y_size'] * (col_idx) - 1)
                     self.chromozome[idx] = random.randint(input_size + config['y_size'] * ((col_idx) - config['lookback']), input_size + config['y_size'] * (col_idx) - 1)
 
     def copy(self):
@@ -120,6 +116,39 @@ class Individual:
             for j in range(config['y_size']):
                 print(f"({self.chromozome[(i * config['y_size'] + j) * 3]},{self.chromozome[(i * config['y_size'] + j) * 3 + 1]},{self.chromozome[(i * config['y_size'] + j) * 3 + 2]})", end='')
         print(self.chromozome[-1])
+
+    def plot_chromozome(self):
+        G = nx.DiGraph()
+
+        x_size = config['x_size']
+        y_size = config['y_size']
+
+        for i in range(x_size):
+            for j in range(y_size):
+                gate = (self.chromozome[(i * y_size + j) * 3], self.chromozome[(i * y_size + j) * 3 + 1], self.chromozome[(i * y_size + j) * 3 + 2])
+
+                node = f"({gate[0]},{gate[1]},{gate[2]})"
+                G.add_node((i,j), label=node, layer=i, subset=i)
+
+                if i != 0:
+                    if gate[0] > (input_size - 1) and gate[1] > (input_size - 1): # do not connect to input nodes
+                        node_i = (gate[0] - input_size) // y_size # first edge
+                        node_j = (gate[0] - input_size) % y_size
+                        G.add_edge((node_i, node_j), (i, j))
+
+                        node_i = (gate[1] - input_size) // y_size # second edge
+                        node_j = (gate[1] - input_size) % y_size
+                        G.add_edge((node_i, node_j), (i, j))
+
+        G.add_node((x_size, 0), label=f"{self.chromozome[-1]}", layer=x_size, subset=x_size) # output node
+        node_i = (self.chromozome[-1] - input_size) // y_size
+        node_j = (self.chromozome[-1] - input_size) % y_size
+        G.add_edge((node_i, node_j), (x_size, 0))
+
+        pos = nx.multipartite_layout(G, subset_key="layer")
+        labels = nx.get_node_attributes(G, 'label')
+        nx.draw(G, pos, labels=labels, with_labels=True, node_size=2000, node_color='lightblue', font_size=8)
+        plt.show()
 
 
 class Population:
@@ -259,7 +288,6 @@ def cross_validation(data, num_generations, pop_size, MUTATION_MAX, lookback, x_
         wandb.finish()
     else:
         print(f"Average test accuracy: {sum(test_accs) / len(test_accs) * 100:.2f}%")
-        print("Best individual:")
-        best_individual.print_chromozome()
+        best_individual.plot_chromozome()
 
     return test_accs, test_sensis, test_specis
